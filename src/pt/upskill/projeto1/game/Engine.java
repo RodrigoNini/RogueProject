@@ -4,6 +4,7 @@ import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.objects.Floor;
 import pt.upskill.projeto1.objects.Hero;
+import pt.upskill.projeto1.objects.Room;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
@@ -17,19 +18,15 @@ public class Engine {
 
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-
-        List<ImageTile> tiles = new ArrayList<>();
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                tiles.add(new Floor(new Position(i, j)));
-            }
-        }
+        Room room = Room.getInstance();
+        List<ImageTile> tiles = room.readFile();
 
         Hero hero = Hero.getInstance();
         tiles.add(hero);
 
         gui.setEngine(this);
         gui.newImages(tiles);
+
         gui.go();
 
         gui.setStatus("O jogo começou!");

@@ -1,18 +1,16 @@
 package pt.upskill.projeto1.objects;
 
+import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public abstract class Adversarios {
+public abstract class Adversarios implements ImageTile {
     private String name;
     private int health;
     private int damage;
-
     private Position position;
 
-    public Adversarios(String name, int health, int damage) {
-        this.name = name;
-        this.health = health;
-        this.damage = damage;
+    public Adversarios() {
+
     }
 
     public abstract void movement();
@@ -21,6 +19,7 @@ public abstract class Adversarios {
 
     public abstract void die();
 
+    @Override
     public String getName() {
         return name;
     }
@@ -45,6 +44,7 @@ public abstract class Adversarios {
         this.damage = damage;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }
