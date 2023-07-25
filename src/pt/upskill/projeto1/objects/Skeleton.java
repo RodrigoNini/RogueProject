@@ -5,15 +5,16 @@ import pt.upskill.projeto1.rogue.utils.Position;
 public class Skeleton extends Adversarios{
     private String name;
     private int health;
-
     private int damage;
-
     private Position position;
 
     public Skeleton(Position position) {
-        super("Skeleton", 40, 30, position);
-
+        this.name = "Skeleton";
+        this.health = 70;
+        this.damage = 50;
+        this.position = position;
     }
+
 
     @Override
     public void movement() {
@@ -22,18 +23,32 @@ public class Skeleton extends Adversarios{
 
     @Override
     public void attack() {
-        Hero hero = Hero.getInstance();
-        hero.setHealth(hero.getHealth() - damage);
+
     }
 
     @Override
     public void die() {
-        health = 0;
+
     }
 
     @Override
     public String getName() {
-        return "Skeleton";
+        return name;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public void setHealth() {
+
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
     }
 
     @Override
@@ -41,5 +56,8 @@ public class Skeleton extends Adversarios{
         return position;
     }
 
+    @Override
+    public void setPosition() {
 
+    }
 }

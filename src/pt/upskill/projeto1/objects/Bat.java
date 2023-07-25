@@ -4,11 +4,18 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Bat extends Adversarios{
 
+    private String name;
+    private int health;
+    private int damage;
     private Position position;
 
-    public Bat(){
-        super("Bat", 60, 30, new Position(0,0));
+    public Bat(Position position) {
+        this.name = "Bat";
+        this.health = 40;
+        this.damage = 20;
+        this.position = position;
     }
+
 
     @Override
     public void movement() {
@@ -27,11 +34,31 @@ public class Bat extends Adversarios{
 
     @Override
     public String getName() {
-        return "Bat";
+        return name;
+    }
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public void setHealth() {
+
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
     }
 
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void setPosition() {
+
     }
 }

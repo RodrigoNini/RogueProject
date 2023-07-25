@@ -4,10 +4,7 @@ import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public abstract class Adversarios implements ImageTile {
-    private String name;
-    private int health;
-    private int damage;
-    private Position position;
+
 
     public Adversarios() {
 
@@ -19,37 +16,16 @@ public abstract class Adversarios implements ImageTile {
 
     public abstract void die();
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+     public abstract String getName();
 
-    public int getHealth() {
-        return health;
-    }
+    public abstract int getHealth();
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+    public abstract void setHealth();
 
-    public int getDamage() {
-        return damage;
-    }
+    public abstract int getDamage();
 
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
+    public abstract Position getPosition();
 
-    @Override
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+    public abstract void setPosition();
 }

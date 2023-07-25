@@ -7,6 +7,8 @@ public class Key implements ImageTile {
 
     private Position position;
 
+    private Room room;
+
     public Key(Position position) {
         this.position = position;
     }

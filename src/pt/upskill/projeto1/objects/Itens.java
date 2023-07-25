@@ -1,8 +1,11 @@
 package pt.upskill.projeto1.objects;
 
-public abstract class Itens {
-    private String name;
-    private String effect;
+import pt.upskill.projeto1.gui.ImageTile;
 
+public abstract class Itens implements ImageTile {
+
+public abstract void use();
+
+public abstract void drop();
 
 }

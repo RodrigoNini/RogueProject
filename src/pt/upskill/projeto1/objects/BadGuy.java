@@ -4,15 +4,21 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class BadGuy extends Adversarios{
 
+    private String name;
+    private int health;
+    private int damage;
     private Position position;
 
-    public BadGuy() {
-        super("BadGuy", 80, 60, new Position(0,0));
+    public BadGuy(Position position) {
+        this.name = "BadGuy";
+        this.health = 70;
+        this.damage = 50;
+        this.position = position;
     }
 
     @Override
     public void movement() {
-        Hero hero = Hero.getInstance();
+
     }
 
     @Override
@@ -27,11 +33,32 @@ public class BadGuy extends Adversarios{
 
     @Override
     public String getName() {
-        return "BadGuy";
+        return name;
+    }
+
+
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    @Override
+    public void setHealth() {
+
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
     }
 
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void setPosition() {
+
     }
 }
