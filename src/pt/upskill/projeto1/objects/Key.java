@@ -6,11 +6,18 @@ import pt.upskill.projeto1.rogue.utils.Position;
 public class Key implements ImageTile {
 
     private Position position;
-
+    private String name;
     private Room room;
 
     public Key(Position position) {
         this.position = position;
+    }
+    public Key(String name) {
+        this.name = name;
+    }
+
+    public String whichDoor(){
+        return name;
     }
 
     @Override
