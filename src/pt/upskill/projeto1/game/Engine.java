@@ -5,6 +5,7 @@ import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.objects.Floor;
 import pt.upskill.projeto1.objects.Hero;
 import pt.upskill.projeto1.objects.Room;
+import pt.upskill.projeto1.objects.RoomManager;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
@@ -19,7 +20,7 @@ public class Engine {
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
         Room room = Room.getInstance();
-        List<ImageTile> tiles = room.readFile();
+        List<ImageTile> tiles = room.getCurrentRoom();
 
         Hero hero = Hero.getInstance();
         tiles.add(hero);

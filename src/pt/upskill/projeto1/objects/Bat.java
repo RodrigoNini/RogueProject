@@ -19,7 +19,22 @@ public class Bat extends Adversarios{
 
     @Override
     public void movement() {
+        Hero hero = Hero.getInstance();
+        Position heroPosition = hero.getPosition();
+        int heroX = heroPosition.getX();
+        int heroY = heroPosition.getY();
+        int batX = position.getX();
+        int batY = position.getY();
+        if((batY - heroY)<3 && (batX - heroX)<3){
+            if(batY<heroY){
+                if(batX<heroX)
+                position = new Position(batX, batY + 1);
+            } else {
+                position = new Position(batX, batY - 1);
+            }
 
+            position = new Position(batX - 1, batY - 1);
+        }
     }
 
     @Override

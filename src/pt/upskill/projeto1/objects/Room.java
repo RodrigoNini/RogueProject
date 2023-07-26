@@ -18,23 +18,62 @@ public class Room implements ImageTile {
 
     private String name;
     private Position position;
+
+    List Room0 = readFile("C:/Users/rodri/IdeaProjects/RogueProject/rooms/room0.txt");
+    List Room1 = readFile("C:/Users/rodri/IdeaProjects/RogueProject/rooms/room1.txt");
+    List Room2 = readFile("C:/Users/rodri/IdeaProjects/RogueProject/rooms/room2.txt");
+
+    private static List<ImageTile> currentRoom;
+
     private static final Room INSTANCE = new Room("Room");
 
     public Room(String name) {
         this.name = name;
+        currentRoom = Room0;
     }
 
     public static Room getInstance() {
         return INSTANCE;
     }
 
-    public List<ImageTile> readFile()  {
+    Hero hero = Hero.getInstance();
+
+    public List<ImageTile> readFile(String file)  {
         List<ImageTile> tiles = new ArrayList<>();
-        try(Scanner reader = new Scanner(new File("C:/Users/rodri/IdeaProjects/RogueProject/rooms/room0.txt"))){
+        try(Scanner reader = new Scanner(new File(file))){
             int y = 0;
             while(reader.hasNextLine()){
                 String novaLinha = reader.nextLine();
-                if(novaLinha.startsWith("#")) {continue;}
+                if(novaLinha.startsWith("#")) {
+                    String[] instruções = novaLinha.split(" ");
+                    if(instruções[1].equals("0")  || instruções[1].equals("1") || instruções[1].equals("2")){
+                        //verificar que tipo de porta é
+                        // a que sala vai dar
+                        //o número da porta na qual o herói vai aparecer nessa sala
+                        // se é necessário chave e qual para abrir essa porta
+                        if(instruções[2].equals("D")){
+                            // tipo de porta deve ser fechada
+                        }else if(instruções[2].equals("E")){
+                            //tipo de porta deve ser doorway
+                        }
+
+
+                        switch(instruções[3]){
+                     case "room0.txt":
+                         //do something
+                         break;
+                     case "room1.txt":
+                         //do something
+                         break;
+                     case "room2.txt":
+                         //do something
+                         break;
+                 }
+                    } else if (instruções[1].equals("k")) {
+
+                    }
+
+                    continue;}
                 String[] coluna = novaLinha.split("");
                 int x = 0;
                 for (String tile:
@@ -44,23 +83,44 @@ public class Room implements ImageTile {
                             tiles.add(new Wall(new Position(x, y)));
                             break;
                         case "0":
-                            tiles.add(new Door(new Position(x, y), true, true));
+                            tiles.add(new Floor(new Position(x, y)));
+                            tiles.add(new Doorway(new Position(x, y)));
                             break;
                         case "k":
+                            tiles.add(new Floor(new Position(x, y)));
                             tiles.add(new Key(new Position(x, y)));
                             break;
                         case "S":
-                            tiles.add(new Skeleton(new Position(x, y)));
+                            tiles.add(new Floor(new Position(x, y)));
+                            Skeleton skeleton = new Skeleton(new Position(x, y));
+                            tiles.add(skeleton);
                             break;
                         case "H":
+                            tiles.add(new Floor(new Position(x, y)));
                             Hero hero = Hero.getInstance();
                             hero.setPosition(new Position(x, y));
                             break;
                         case "1":
-                            tiles.add(new Door(new Position(x, y), false, false));
+                            /*Hero hero1 = Hero.getInstance();
+                            if(hero1.getItens().contains("key1")){
+                                tiles.add(new DoorOpen(new Position(x, y)));
+                            } else {
+                                tiles.add(new DoorClosed(new Position(x, y)));
+                            }*/
+                            tiles.add(new DoorClosed(new Position(x, y)));
                             break;
                         case "2":
-                            tiles.add(new Door(new Position(x, y), false,false));
+                            tiles.add(new DoorClosed(new Position(x, y)));
+                            break;
+                        case "b":
+                            tiles.add(new Floor(new Position(x, y)));
+                            Bat bat = new  Bat(new Position(x, y));
+                            tiles.add(bat);
+                            break;
+                        case "m":
+                            tiles.add(new Floor(new Position(x, y)));
+                            Meat meat = new Meat(new Position(x, y));
+                            tiles.add(meat);
                             break;
                         default:
                             tiles.add(new Floor(new Position(x, y)));
@@ -76,23 +136,43 @@ public class Room implements ImageTile {
         return tiles;
     }
 
-    public void printRoom(){
 
-        List<ImageTile> tiles = new ArrayList<>();
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                tiles.add(new Floor(new Position(i, j)));
+    public static boolean findObstacle(Position position){
+        List<ImageTile> tiles = getCurrentRoom();
+        for (ImageTile tile:
+                tiles) {
+            if(tile.getPosition().equals(position)){
+                if(tile instanceof Wall || tile instanceof DoorClosed || tile instanceof Adversarios){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+public void changeRoom() {
+        // falta implementar abertura de portas fechadas com chaves
+    for (ImageTile tile :
+            currentRoom) {
+        if (tile.getPosition().equals(position)) {
+            if (tile instanceof Door) {
+                currentRoom = Room1;
             }
         }
     }
+}
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
+    }
+
+    public static List<ImageTile> getCurrentRoom() {
+        return currentRoom;
     }
 }

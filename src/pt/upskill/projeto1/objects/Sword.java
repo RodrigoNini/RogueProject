@@ -2,19 +2,20 @@ package pt.upskill.projeto1.objects;
 
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Meat extends Itens{
+public class Sword extends Itens{
 
-    private String name;
+    private String name = "Sword";
     private Position position;
 
-    public Meat(Position position) {
-        this.name = "GoodMeat";
+    private int damage;
+
+public Sword(Position position) {
         this.position = position;
     }
 
     @Override
     public String getName() {
-        return name;
+        return "Sword";
     }
 
     @Override

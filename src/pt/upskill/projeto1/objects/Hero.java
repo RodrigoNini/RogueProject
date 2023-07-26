@@ -4,11 +4,17 @@ import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class Hero implements ImageTile {
 
     private int health;
     private Position position;
     private static final Hero INSTANCE = new Hero(new Position(4, 3));
+
+    private ArrayList<Itens> inventory;
 
     private Hero(Position position) {
         this.position = position;
@@ -33,8 +39,76 @@ public class Hero implements ImageTile {
     }
 
     public void setPosition(Direction direction) {
+        Room room = Room.getInstance();
         Position newPosition = this.getPosition().plus(direction.asVector());
-        this.position = newPosition;
+        if(!Room.findObstacle(newPosition)){
+            this.position = newPosition;
+        }
+
+    }
+
+    public void pickUpItem() {
+        Room room = Room.getInstance();
+        List<ImageTile> tiles = RoomManager.getCurrentRoom();
+        for (ImageTile tile:
+                tiles) {
+            if(tile.getPosition().equals(position)){
+                if(tile instanceof Meat || tile instanceof Sword || tile instanceof Hammer){
+                    inventory.add((Itens) tile);
+                }
+            }
+        }
+    }
+
+
+    public void useItem(String keyPressed) {
+        Scanner scanner = new Scanner(System.in);
+        keyPressed = scanner.nextLine();
+        switch (keyPressed){
+            case "1":
+                System.out.println("Carrega no 1 para usar o item: " + inventory.get(0).getName() + ", ou carrega 0 para largar");
+                keyPressed = scanner.nextLine();
+                if(keyPressed.equals("0")){
+                    System.out.println("Largaste o item: " + inventory.get(0).getName());
+                    inventory.remove(0);
+                    break;
+                } else if (keyPressed.equals("1")) {
+                    System.out.println("Usaste o item: " + inventory.get(0).getName());
+                    inventory.get(0).use();
+                    inventory.remove(0);
+                }
+                break;
+            case "2":
+                System.out.println("Carrega no 2 para usar o item: " + inventory.get(0).getName() + ", ou carrega 0 para largar");
+                keyPressed = scanner.nextLine();
+                if(keyPressed.equals("0")){
+                    System.out.println("Largaste o item: " + inventory.get(0).getName());
+                    inventory.remove(0);
+                    break;
+                } else if (keyPressed.equals("2")) {
+                    System.out.println("Usaste o item: " + inventory.get(0).getName());
+                    inventory.get(0).use();
+                    inventory.remove(0);
+                }
+                    break;
+            case "3":
+                System.out.println("Carrega no 3 para usar o item: " + inventory.get(0).getName() + ", ou carrega 0 para largar");
+                keyPressed = scanner.nextLine();
+                if(keyPressed.equals("0")){
+                    System.out.println("Largaste o item: " + inventory.get(0).getName());
+                    inventory.remove(0);
+                    break;
+                } else if (keyPressed.equals("3")) {
+                    System.out.println("Usaste o item: " + inventory.get(0).getName());
+                    inventory.get(0).use();
+                    inventory.remove(0);
+                }
+                    break;
+        }
+    }
+
+    public ArrayList getItens(){
+        return  inventory;
     }
 
     public int getHealth() {
