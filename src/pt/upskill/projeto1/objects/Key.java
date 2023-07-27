@@ -3,7 +3,7 @@ package pt.upskill.projeto1.objects;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Key implements ImageTile {
+public class Key extends Itens {
 
     private Position position;
     private String name;
@@ -20,6 +20,10 @@ public class Key implements ImageTile {
         return name;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     @Override
     public String getName() {
         return "Key";
@@ -28,5 +32,15 @@ public class Key implements ImageTile {
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void use() {
+
+    }
+
+    @Override
+    public void drop() {
+
     }
 }

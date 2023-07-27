@@ -22,6 +22,7 @@ public class Meat extends Itens{
         return position;
     }
 
+
     @Override
     public void use() {
 

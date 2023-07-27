@@ -12,9 +12,11 @@ public class Hero implements ImageTile {
 
     private int health;
     private Position position;
-    private static final Hero INSTANCE = new Hero(new Position(4, 3));
-
+    private Room currentRoom;
     private ArrayList<Itens> inventory;
+
+
+    private static final Hero INSTANCE = new Hero(new Position(4, 3));
 
     private Hero(Position position) {
         this.position = position;
@@ -39,21 +41,28 @@ public class Hero implements ImageTile {
     }
 
     public void setPosition(Direction direction) {
-        Room room = Room.getInstance();
+        Room room = new Room(currentRoom.getTiles());
         Position newPosition = this.getPosition().plus(direction.asVector());
-        if(!Room.findObstacle(newPosition)){
+        if(!currentRoom.findObstacle(newPosition)){
             this.position = newPosition;
         }
 
     }
 
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+    }
+
     public void pickUpItem() {
-        Room room = Room.getInstance();
-        List<ImageTile> tiles = RoomManager.getCurrentRoom();
+        List<ImageTile> tiles = currentRoom.getTiles();
         for (ImageTile tile:
                 tiles) {
             if(tile.getPosition().equals(position)){
-                if(tile instanceof Meat || tile instanceof Sword || tile instanceof Hammer){
+                if(tile instanceof Itens){
                     inventory.add((Itens) tile);
                 }
             }

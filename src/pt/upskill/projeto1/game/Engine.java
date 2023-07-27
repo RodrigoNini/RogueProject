@@ -19,8 +19,8 @@ public class Engine {
 
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-        Room room = Room.getInstance();
-        List<ImageTile> tiles = room.getCurrentRoom();
+        RoomManager roomManager = RoomManager.getINSTANCE();
+        List<ImageTile> tiles = roomManager.getTiles();
 
         Hero hero = Hero.getInstance();
         tiles.add(hero);
