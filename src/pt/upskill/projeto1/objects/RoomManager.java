@@ -20,7 +20,7 @@ public class RoomManager implements ImageTile {
     private Hero hero = Hero.getInstance();
     private Position heroPosition = hero.getPosition();
     private Room currentRoom;
-
+    private List<Adversarios> currentAdversarios = currentRoom.getAdversarios();
 
     private static final RoomManager INSTANCE = new RoomManager();
 
@@ -36,8 +36,21 @@ public class RoomManager implements ImageTile {
     public Room getCurrentRoom() {
         return currentRoom;
     }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+    }
+
     public List<ImageTile> getTiles(){
         return currentRoom.getTiles();
+    }
+
+    public List<Adversarios> getCurrentAdversarios() {
+        return currentAdversarios;
+    }
+
+    public void setCurrentAdversarios() {
+        this.currentAdversarios = currentRoom.getAdversarios();
     }
 
     public void restoreHealth() {
@@ -63,6 +76,8 @@ public class RoomManager implements ImageTile {
                 currentRoom = Room1;
             }
         }
+        setCurrentRoom();
+        setCurrentAdversarios();
     }
 }*/
 

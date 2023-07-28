@@ -2,10 +2,7 @@ package pt.upskill.projeto1.game;
 
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
-import pt.upskill.projeto1.objects.Floor;
-import pt.upskill.projeto1.objects.Hero;
-import pt.upskill.projeto1.objects.Room;
-import pt.upskill.projeto1.objects.RoomManager;
+import pt.upskill.projeto1.objects.*;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
@@ -15,11 +12,10 @@ import java.util.List;
 import java.awt.event.KeyListener;
 
 public class Engine {
-
-
+    RoomManager roomManager = RoomManager.getINSTANCE();
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-        RoomManager roomManager = RoomManager.getINSTANCE();
+
         List<ImageTile> tiles = roomManager.getTiles();
 
         Hero hero = Hero.getInstance();
@@ -39,9 +35,11 @@ public class Engine {
 
     public void notify(int keyPressed){
         Hero hero = Hero.getInstance();
+        roomManager.
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
+
         }
         if (keyPressed == KeyEvent.VK_UP){
             System.out.println("User pressed up key!");
