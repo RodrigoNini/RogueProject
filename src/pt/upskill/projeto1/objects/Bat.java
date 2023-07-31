@@ -15,32 +15,14 @@ public class Bat extends Adversarios{
 
     public Bat(Position position) {
         this.name = "Bat";
-        this.health = 40;
-        this.damage = 20;
+        this.health = 1;
+        this.damage = 1;
         this.position = position;
     }
 
 
     @Override
     public void movement() {
-        Position heroPosition = hero.getPosition();
-        int heroX = heroPosition.getX();
-        int heroY = heroPosition.getY();
-        int batX = position.getX();
-        int batY = position.getY();
-        if((batY - heroY)<3 && (batX - heroX)<3){
-            if(batY<heroY){
-                if(batX<heroX)
-                position = new Position(batX, batY + 1);
-            } else {
-                position = new Position(batX, batY - 1);
-            }
-
-            position = new Position(batX - 1, batY - 1);
-        }
-    }
-
-    public void move() {
         int distance = distanceBetween(this.position, hero.getPosition());
         if (distance <= 3) {
             moveNear();
@@ -48,6 +30,7 @@ public class Bat extends Adversarios{
             moveRandom();
         }
     }
+
 
     private void moveNear() {
         Position heroPosition = hero.getPosition();

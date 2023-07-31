@@ -10,14 +10,15 @@ import java.util.Scanner;
 
 public class Hero implements ImageTile {
 
-    private int health;
+    private int health = 4;
+    private int score = 100;
+    private int damage = 1;
     private Position position;
     private Room currentRoom;
     private ArrayList<Itens> inventory;
-
+    private ArrayList<FireBall> fireBalls = new ArrayList<>();
 
     private static final Hero INSTANCE = new Hero(new Position(4, 3));
-
     private Hero(Position position) {
         this.position = position;
     }
@@ -69,6 +70,9 @@ public class Hero implements ImageTile {
         }
     }
 
+    public ArrayList<FireBall> getFireBalls() {
+        return fireBalls;
+    }
 
     public void useItem(String keyPressed) {
         Scanner scanner = new Scanner(System.in);
@@ -116,7 +120,12 @@ public class Hero implements ImageTile {
         }
     }
 
-    public ArrayList getItens(){
+    public List<Itens> getInventory(){
+        //código apenas para testar
+        this.inventory = new ArrayList<>();
+        inventory.add(new Hammer(new Position(8,6)));
+        inventory.add(new Meat(new Position(3,3)));
+        inventory.add(new Key(new Position(6,3)));
         return  inventory;
     }
 

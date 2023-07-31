@@ -25,8 +25,6 @@ public abstract class Adversarios implements ImageTile {
 
     public abstract int getDamage();
 
-    public abstract void move();
-
     public abstract Position getPosition();
 
     public abstract void setPosition();
