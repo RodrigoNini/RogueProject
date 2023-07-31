@@ -15,23 +15,11 @@ public class Skeleton extends Adversarios{
 
     public Skeleton(Position position) {
         this.name = "Skeleton";
-        this.health = 70;
-        this.damage = 50;
+        this.health = 2;
+        this.damage = 2;
         this.position = position;
     }
 
-    public void move() {
-
-        int distância = distanceBetween(this.position, hero.getPosition());
-
-        if (distância <= 3) {
-            // Se o herói estiver dentro do raio de 3 blocos, mover na direção do herói
-            moveNear();
-        } else {
-            // Caso contrário, mover-se aleatoriamente
-            moveRandom();
-        }
-    }
 
     private void moveNear() {
         Position heroPosition = hero.getPosition();
@@ -84,7 +72,12 @@ public class Skeleton extends Adversarios{
 
     @Override
     public void movement() {
-
+        int distância = distanceBetween(this.position, hero.getPosition());
+        if (distância <= 3) {
+            moveNear();
+        } else {
+            moveRandom();
+        }
     }
 
     @Override

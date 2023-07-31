@@ -20,7 +20,8 @@ public class Engine {
 
         Hero hero = Hero.getInstance();
         tiles.add(hero);
-
+        StatusBar statusBar = StatusBar.getINSTANCE();
+        statusBar.initStatusBar();
         gui.setEngine(this);
         gui.newImages(tiles);
 
@@ -35,7 +36,6 @@ public class Engine {
 
     public void notify(int keyPressed){
         Hero hero = Hero.getInstance();
-        roomManager.
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);

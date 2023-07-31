@@ -1,32 +1,21 @@
 package pt.upskill.projeto1.objects;
-
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Black extends Itens{
-    private static final Black INSTANCE = new Black();
+public class Green implements ImageTile {
+    private static final Green INSTANCE = new Green();
 
-    public static Black getInstance() {
+    public static ImageTile getInstance() {
         return INSTANCE;
     }
 
     @Override
     public String getName() {
-        return "Black.png";
+        return "Green.png";
     }
 
     @Override
     public Position getPosition() {
         return null;
-    }
-
-    @Override
-    public void use() {
-
-    }
-
-    @Override
-    public void drop() {
-
     }
 }
