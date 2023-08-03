@@ -1,9 +1,12 @@
 package pt.upskill.projeto1.objects;
 
 import pt.upskill.projeto1.gui.FireTile;
+import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class FireBall implements FireTile {
+public class FireBall implements ImageTile, FireTile{
+
+    private Position position;
 
     public FireBall(Position position) {
     }
@@ -15,16 +18,16 @@ public class FireBall implements FireTile {
 
     @Override
     public void setPosition(Position position) {
-
+        this.position = position;
     }
 
     @Override
     public String getName() {
-        return "Fire.png";
+        return "Fire";
     }
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
     }
 }

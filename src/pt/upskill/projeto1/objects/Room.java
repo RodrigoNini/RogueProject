@@ -138,17 +138,14 @@ public class Room implements ImageTile {
         return tiles;
     }
 
-    public boolean findObstacle(Position position){
 
-        for (ImageTile tile:
-                tiles) {
-            if(tile.getPosition().equals(position)){
-                if(tile instanceof Wall || tile instanceof DoorClosed || tile instanceof Adversarios || tile instanceof Hero){
-                    return true;
-                }
+    public ImageTile getTile(Position position) {
+        for (ImageTile tile : tiles) {
+            if (tile.getPosition().equals(position)) {
+                return tile;
             }
         }
-        return false;
+        return null; // Return null if no tile is found at the specified position
     }
 
     public List<Adversarios> getAdversarios() {

@@ -12,7 +12,7 @@ import java.util.List;
 import java.awt.event.KeyListener;
 
 public class Engine {
-    RoomManager roomManager = RoomManager.getINSTANCE();
+    RoomManager roomManager = RoomManager.getInstance();
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
 
@@ -21,7 +21,7 @@ public class Engine {
         Hero hero = Hero.getInstance();
         tiles.add(hero);
         StatusBar statusBar = StatusBar.getINSTANCE();
-        statusBar.initStatusBar();
+        gui.newStatusImages(statusBar.getStatusBar());
         gui.setEngine(this);
         gui.newImages(tiles);
 
@@ -35,11 +35,11 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
+        List<Adversarios> adversarios = roomManager.getCurrentAdversarios();
         Hero hero = Hero.getInstance();
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
-
         }
         if (keyPressed == KeyEvent.VK_UP){
             System.out.println("User pressed up key!");
@@ -48,6 +48,7 @@ public class Engine {
         if (keyPressed == KeyEvent.VK_LEFT){
             System.out.println("User pressed left key!");
             hero.setPosition(Direction.LEFT);
+
         }
         if (keyPressed == KeyEvent.VK_RIGHT){
             System.out.println("User pressed right key!");

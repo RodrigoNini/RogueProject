@@ -14,13 +14,14 @@ public class Hero implements ImageTile {
     private int score = 100;
     private int damage = 1;
     private Position position;
+    private ArrayList<Itens> inventory = new ArrayList<>();
+    private int fireBalls = 3;
+    private RoomManager roomManager = RoomManager.getInstance();
     private Room currentRoom;
-    private ArrayList<Itens> inventory;
-    private ArrayList<FireBall> fireBalls = new ArrayList<>();
-
     private static final Hero INSTANCE = new Hero(new Position(4, 3));
     private Hero(Position position) {
         this.position = position;
+        this.currentRoom = roomManager.getCurrentRoom();
     }
 
     @Override
@@ -42,9 +43,8 @@ public class Hero implements ImageTile {
     }
 
     public void setPosition(Direction direction) {
-        Room room = new Room(currentRoom.getTiles());
         Position newPosition = this.getPosition().plus(direction.asVector());
-        if(!currentRoom.findObstacle(newPosition)){
+        if(!roomManager.findObstacle(newPosition)){
             this.position = newPosition;
         }
 
@@ -59,22 +59,17 @@ public class Hero implements ImageTile {
     }
 
     public void pickUpItem() {
-        List<ImageTile> tiles = currentRoom.getTiles();
-        for (ImageTile tile:
-                tiles) {
-            if(tile.getPosition().equals(position)){
-                if(tile instanceof Itens){
-                    inventory.add((Itens) tile);
-                }
-            }
+        ImageTile tile = currentRoom.getTile(position);
+        if (tile instanceof Itens) {
+            inventory.add((Itens) tile);
         }
     }
 
-    public ArrayList<FireBall> getFireBalls() {
+    public int getFireBalls() {
         return fireBalls;
     }
 
-    public void useItem(String keyPressed) {
+   /* public void useItem(String keyPressed) {
         Scanner scanner = new Scanner(System.in);
         keyPressed = scanner.nextLine();
         switch (keyPressed){
@@ -118,7 +113,7 @@ public class Hero implements ImageTile {
                 }
                     break;
         }
-    }
+    }*/
 
     public List<Itens> getInventory(){
         //código apenas para testar
