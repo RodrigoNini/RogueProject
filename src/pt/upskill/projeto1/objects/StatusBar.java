@@ -1,42 +1,44 @@
 package pt.upskill.projeto1.objects;
 
-import pt.upskill.projeto1.game.FireBallThread;
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatusBar implements ImageTile {
 
+    private Position position = new Position(0,0);
     ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
     Hero hero = Hero.getInstance();
 
-    private List<ImageTile[]> statusBar = new ArrayList<>(3);
-    private List<FireBall> fireBalls = new ArrayList<>(3);
-    private List<ImageTile> health = new ArrayList<>(4);
-    private List<Itens> itens =new ArrayList<>();
-    private List<ImageTile> itensTiles =new ArrayList<>(3);
+    private List<ImageTile> statusBar = new ArrayList<>();
+    private List<ImageTile> fireBalls = new ArrayList<>();
+    private List<ImageTile> health = new ArrayList<>();
+    private List<ImageTile> itens = new ArrayList<>();
 
     private static final StatusBar INSTANCE = new StatusBar();
 
     public StatusBar(){
-
+        statusBar.add(new Black(new Position(0,0)));
+        statusBar.add(new FireBall(new Position(0,0)));
+        statusBar.add(new Black(new Position(1,0)));
+        statusBar.add(new FireBall(new Position(1,0)));
+        statusBar.add(new Black(new Position(2,0)));
+        statusBar.add(new FireBall(new Position(2,0)));
+        statusBar.add(new Green(new Position(3,0)));
+        statusBar.add(new Green(new Position(4,0)));
+        statusBar.add(new Green(new Position(5,0)));
+        statusBar.add(new Green(new Position(6,0)));
+        statusBar.add(new Black(new Position(7,0)));
+        statusBar.add(new Black(new Position(8,0)));
+        statusBar.add(new Black(new Position(9,0)));
     }
-    public void initStatusBar() {
-        while (true) {
-           //verificar isto! List<ImageTile> fireTiles = new ArrayList<>{new FireBall(new Position(0,0)), new FireBall(new Position(1,0)), new FireBall(new Position(2,0))};
-            manageFireBalls();
-            initializaHealthBar();
-            manageHeroHealth();
-            manageHeroItens();
-            statusBar.add(fireBalls.toArray(new ImageTile[0]));
-            statusBar.add(health.toArray(new ImageTile[0]));
-            statusBar.add(itens.toArray(new ImageTile[0]));
 
-
-        }
+    public List<ImageTile> getStatusBar() {
+        return statusBar;
     }
 
     public static StatusBar getINSTANCE() {
@@ -44,70 +46,57 @@ public class StatusBar implements ImageTile {
     }
 
     public void manageFireBalls(){
-
-    }
-
-    public void initializaHealthBar(){
-
-        for(int i = 0; i < hero.getHealth(); i++) {
-            health.add(Green.getInstance());
+        int fireBalls = hero.getFireBalls();
+        if(fireBalls == 2){
+            this.fireBalls.remove(2);
+        }
+        if(fireBalls == 1){
+            this.fireBalls.remove(1);
+        }
+        if(fireBalls == 0){
+            this.fireBalls.remove(0);
         }
     }
+
     public void manageHeroHealth(){
         int heroHealth = hero.getHealth();
         if(heroHealth == 3){
             health.remove(3);
-            health.add(Red.getInstance());
+            health.add(new Red(new Position(6,0)));
         }
         if(heroHealth == 2){
             health.remove(2);
-            health.add(Red.getInstance());
+            health.add(new Red(new Position(5,0)));
         }
         if(heroHealth == 1){
             health.remove(1);
-            health.add(Red.getInstance());
+            health.add(new Red(new Position(4,0)));
         }
         if(heroHealth == 0){
             health.remove(0);
-            health.add(Red.getInstance());
+            health.add(new Red(new Position(3,0)));
         }
+        //possivelmente integrar aqui o fim do jogo quando o heroi morre
     }
 
-    /*public void manageHeroItens() {
-        itens = hero.getInventory();
+    public void manageHeroItens() {
+        List<Itens> itens = hero.getInventory();
         for (Itens item : itens) {
-            itens.add(Black.getInstance());
             if (!item.equals(null)) {
                 itens.add(item);
             } else{
-                itens.add(Black.getInstance());
+                continue;
             }
         }
-    }*/
-
-    public void manageHeroItens() {
-        List<Itens> updatedItens = new ArrayList<>();
-        for (Itens item : hero.getInventory()) {
-            updatedItens.add(Black.getInstance());
-            if (item != null) {
-                updatedItens.add(item);
-            } else {
-                updatedItens.add(Black.getInstance());
-            }
-        }
-        itens = updatedItens;
     }
-
-
-
 
     @Override
     public String getName() {
-        return "Black.png";
+        return "StatusBar";
     }
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
     }
 }
