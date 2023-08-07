@@ -12,8 +12,9 @@ import java.util.List;
 import java.awt.event.KeyListener;
 
 public class Engine {
-    RoomManager roomManager = RoomManager.getInstance();
+    private RoomManager roomManager;
     public void init(){
+        roomManager = RoomManager.getInstance();
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
 
         List<ImageTile> tiles = new ArrayList<>(RoomManager.getInstance().getTiles());
