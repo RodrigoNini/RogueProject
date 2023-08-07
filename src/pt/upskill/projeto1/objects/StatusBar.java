@@ -12,7 +12,6 @@ public class StatusBar implements ImageTile {
 
     private Position position = new Position(0,0);
     ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-    Hero hero = Hero.getInstance();
 
     private List<ImageTile> statusBar = new ArrayList<>();
     private List<ImageTile> fireBalls = new ArrayList<>();
@@ -35,6 +34,8 @@ public class StatusBar implements ImageTile {
         statusBar.add(new Black(new Position(7,0)));
         statusBar.add(new Black(new Position(8,0)));
         statusBar.add(new Black(new Position(9,0)));
+        gui.addStatusImage(this);
+        // é possivel fazer 3 arrays diferentes e implementar através de ciclos dentro da lista StatusImage
     }
 
     public List<ImageTile> getStatusBar() {
@@ -46,7 +47,7 @@ public class StatusBar implements ImageTile {
     }
 
     public void manageFireBalls(){
-        int fireBalls = hero.getFireBalls();
+        int fireBalls = Hero.getInstance().getFireBalls();
         if(fireBalls == 2){
             this.fireBalls.remove(2);
         }
@@ -59,7 +60,7 @@ public class StatusBar implements ImageTile {
     }
 
     public void manageHeroHealth(){
-        int heroHealth = hero.getHealth();
+        int heroHealth = Hero.getInstance().getHealth();
         if(heroHealth == 3){
             health.remove(3);
             health.add(new Red(new Position(6,0)));
@@ -80,7 +81,7 @@ public class StatusBar implements ImageTile {
     }
 
     public void manageHeroItens() {
-        List<Itens> itens = hero.getInventory();
+        List<Itens> itens = Hero.getInstance().getInventory();
         for (Itens item : itens) {
             if (!item.equals(null)) {
                 itens.add(item);

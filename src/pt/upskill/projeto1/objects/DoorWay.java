@@ -3,12 +3,16 @@ package pt.upskill.projeto1.objects;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Doorway extends Door {
+public class DoorWay extends Doors  {
 
-    private String  name = "DoorWay";
     private Position position;
+    private String nextRoom;
 
-    public Doorway(Position position) {
+    public DoorWay(String nextRoom) {
+        this.nextRoom = nextRoom;
+    }
+
+    public void setPosition(Position position) {
         this.position = position;
     }
 

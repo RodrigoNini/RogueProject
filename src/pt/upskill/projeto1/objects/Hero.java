@@ -6,6 +6,7 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Hero implements ImageTile {
@@ -16,14 +17,12 @@ public class Hero implements ImageTile {
     private Position position;
     private ArrayList<Itens> inventory = new ArrayList<>();
     private int fireBalls = 3;
-    private RoomManager roomManager = RoomManager.getInstance();
-    private Room currentRoom;
-    private static final Hero INSTANCE = new Hero(new Position(4, 3));
-    private Hero(Position position) {
-        this.position = position;
-        this.currentRoom = roomManager.getCurrentRoom();
-    }
+    private Room currentRoom = RoomManager.getInstance().getCurrentRoom();
 
+    private Hero() {
+
+    }
+    private static final Hero INSTANCE = new Hero();
     @Override
     public String getName() {
         return "Hero";
@@ -44,7 +43,7 @@ public class Hero implements ImageTile {
 
     public void setPosition(Direction direction) {
         Position newPosition = this.getPosition().plus(direction.asVector());
-        if(!roomManager.findObstacle(newPosition)){
+        if(!RoomManager.getInstance().findObstacle(newPosition)){
             this.position = newPosition;
         }
 

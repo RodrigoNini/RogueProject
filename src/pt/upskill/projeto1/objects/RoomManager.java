@@ -12,40 +12,39 @@ import java.util.List;
 import java.util.Scanner;
 
 public class RoomManager implements ImageTile {
-    Room room = new Room();
-    private Room room0 = new Room(room.readFile("C:\\Users\\rodri\\IdeaProjects\\Rogue_UPskill2023_v1_Rodrigo_Alves\\rooms\\room0.txt"));
-    private Room room1 = new Room(room.readFile("C:\\Users\\rodri\\IdeaProjects\\Rogue_UPskill2023_v1_Rodrigo_Alves\\rooms\\room1.txt"));
-    private Room room2 = new Room(room.readFile("C:\\Users\\rodri\\IdeaProjects\\Rogue_UPskill2023_v1_Rodrigo_Alves\\rooms\\room2.txt"));
 
-    private Hero hero = Hero.getInstance();
-    private Position heroPosition = hero.getPosition();
+    private Room room0;
+    private Room room1;
+    private Room room2;
     private Room currentRoom;
     private List<Adversarios> currentAdversarios = new ArrayList<>();
     private Position position;
 
+    public final static RoomManager INSTANCE = new RoomManager();
     public RoomManager(){
-        currentRoom = room0;
-        hero.setCurrentRoom(currentRoom);
+        room0 = new Room("rooms\\room0.txt");
+        room1 = new Room("rooms\\room1.txt");
+        room2 = new Room("rooms\\room2.txt");
+        this.currentRoom = room0;
         this.currentAdversarios = currentRoom.getAdversarios();
-        this.position = new Position(0,0);
     }
 
-    private static final RoomManager INSTANCE = new RoomManager();
     public static RoomManager getInstance() {
         return INSTANCE;
     }
+
+
 /*
     public void restoreHealth() {
         List<Itens> itens = currentRoom.getItens();
         Position meatPosition = null;
-        for (Itens item :
-                itens) {
-            if (item.getName().equals("Meat")) {
-                meatPosition = item.getPosition();
+        for (ImageTile tile:
+                currentRoom.getTiles()) {
+            if(tile.getPosition().equals(position)){
+                if(tile instanceof Meat){
+                    hero.setHealth(4);
+                }
             }
-        }
-        if (hero.getPosition() == meatPosition) {
-            hero.setHealth(100);
         }
     }
 
@@ -68,7 +67,7 @@ public class RoomManager implements ImageTile {
         for (ImageTile tile:
                 currentRoom.getTiles()) {
             if(tile.getPosition().equals(position)){
-                if(tile instanceof Wall || tile instanceof DoorClosed || tile instanceof Adversarios || tile instanceof Hero){
+                if(tile instanceof Wall || tile instanceof Door || tile instanceof Adversarios || tile instanceof Hero){
                     return true;
                 }
             }
@@ -79,7 +78,7 @@ public class RoomManager implements ImageTile {
 
     //getters and setters
     public Room getCurrentRoom() {
-        return currentRoom;
+        return this.currentRoom;
     }
 
     public void setCurrentRoom(Room currentRoom) {

@@ -12,20 +12,19 @@ import java.util.Scanner;
 
 public class Room implements ImageTile {
 
-    private String name;
     private Position position;
     private List<ImageTile> tiles;
     private Key key;
     private List<Adversarios> adversarios = new ArrayList<>();
     private List<Itens> itens = new ArrayList<>();
-    private List<Door> doors = new ArrayList<>();
+    private List<Doors> doors = new ArrayList<>();
     private String file;
     public Room(List<ImageTile> tiles) {
         this.tiles = tiles;
     }
 
-    public Room() {
-
+    public Room(String file) {
+        this.file = file;
     }
 
     public List<ImageTile> readFile(String file)  {
@@ -35,34 +34,31 @@ public class Room implements ImageTile {
             while(reader.hasNextLine()){
                 String novaLinha = reader.nextLine();
                 if(novaLinha.startsWith("#")) {
-                   /* String[] instruções = novaLinha.split(" ");
-                    if(instruções[1].equals("0")  || instruções[1].equals("1") || instruções[1].equals("2")){
-                        //verificar que tipo de porta é
-                        // a que sala vai dar
-                        //o número da porta na qual o herói vai aparecer nessa sala
-                        // se é necessário chave e qual para abrir essa porta
-                        if(instruções[2].equals("D")){
-                            // tipo de porta deve ser fechada
-                        }else if(instruções[2].equals("E")){
-                            //tipo de porta deve ser doorway
-                        }
-
-
-                        if (instruções[3] == "room0.txt") {
-                            // do something for room0.txt
-                        }else if (instruções[3] == "room1.txt") {
-                            // do something for room1.txt
-                        }else if (instruções[3] == "room2.txt") {
-                            // do something for room2.txt
-                        }
-
-                    } else if (instruções[1].equals("k")) {
-                        key = new Key(instruções[2]);
-                        itens.add(key);
+                    String[] instruções = novaLinha.split(" ");
+                    if (instruções.length < 2) {
+                        continue;
                     }
-*/
-
-                    continue;}
+                        if (instruções[1].equals("0") || instruções[1].equals("1") || instruções[1].equals("2")) {
+                            if (instruções.length < 4) {
+                                continue;
+                            }
+                            if (instruções[2].equals("D")) {
+                                String roomFileName = instruções[3];
+                                Door doorClosed = new Door("DoorClosed", roomFileName);
+                                    doors.add(doorClosed);
+                                    if (instruções.length >= 5) {
+                                    doorClosed.setKey(instruções[4]);
+                                }
+                            } else if (instruções[2].equals("E")) {
+                                String roomFileName = instruções[3];
+                                DoorWay doorWay = new DoorWay(roomFileName);
+                                doors.add(doorWay);
+                            }
+                        } else if (instruções[1].equals("k")) {
+                            key = new Key(instruções[2]);
+                        }
+                        continue;
+                    }
                 String[] coluna = novaLinha.split("");
                 int x = 0;
                 for (String tile:
@@ -73,12 +69,21 @@ public class Room implements ImageTile {
                             break;
                         case "0":
                             tiles.add(new Floor(new Position(x, y)));
-                            tiles.add(new Doorway(new Position(x, y)));
+                            doors.get(0).setPosition(new Position(x, y));
+                            tiles.add(doors.get(0));
+                            break;
+                        case "1":
+                            doors.get(1).setPosition(new Position(x, y));
+                            tiles.add(doors.get(1));
+                            break;
+                        case "2":
+                            doors.get(2).setPosition(new Position(x, y));
+                            tiles.add(doors.get(2));
                             break;
                         case "k":
                             tiles.add(new Floor(new Position(x, y)));
-                            tiles.add(new Key(new Position(x, y)));
-                            //key.setPosition(new Position(x, y));
+                            tiles.add(key);
+                            key.setPosition(new Position(x, y));
                             break;
                         case "S":
                             tiles.add(new Floor(new Position(x, y)));
@@ -88,11 +93,7 @@ public class Room implements ImageTile {
                             break;
                         case "H":
                             tiles.add(new Floor(new Position(x, y)));
-                            Hero hero = Hero.getInstance();
-                            hero.setPosition(new Position(x, y));
-                            break;
-                        case "1", "2":
-                            tiles.add(new DoorClosed(new Position(x, y)));
+                            Hero.getInstance().setPosition(new Position(x, y));
                             break;
                         case "B":
                             tiles.add(new Floor(new Position(x, y)));
@@ -156,13 +157,17 @@ public class Room implements ImageTile {
         return itens;
     }
 
-    public List<Door> getDoors() {
+    public List<Doors> getDoors() {
         return doors;
+    }
+
+    public Key getKey() {
+        return key;
     }
 
     @Override
     public String getName() {
-        return name;
+        return null;
     }
 
     @Override

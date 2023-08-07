@@ -16,10 +16,11 @@ public class Engine {
     public void init(){
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
 
-        List<ImageTile> tiles = roomManager.getTiles();
+        List<ImageTile> tiles = new ArrayList<>(RoomManager.getInstance().getTiles());
+        tiles.add(Hero.getInstance());
 
-        Hero hero = Hero.getInstance();
-        tiles.add(hero);
+
+        tiles.add(Hero.getInstance());
         StatusBar statusBar = StatusBar.getINSTANCE();
         gui.newStatusImages(statusBar.getStatusBar());
         gui.setEngine(this);
@@ -35,24 +36,48 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
-        List<Adversarios> adversarios = roomManager.getCurrentAdversarios();
+        List<Adversarios> adversarios = RoomManager.getInstance().getCurrentAdversarios();
         Hero hero = Hero.getInstance();
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
+            for (ImageTile i: roomManager.getTiles()
+                 ) {
+                if(i instanceof Adversarios){
+                    ((Adversarios) i).movement();
+                }
+            }
         }
         if (keyPressed == KeyEvent.VK_UP){
             System.out.println("User pressed up key!");
             hero.setPosition(Direction.UP);
+            for (ImageTile i: roomManager.getTiles()
+            ) {
+                if(i instanceof Adversarios){
+                    ((Adversarios) i).movement();
+                }
+            }
         }
         if (keyPressed == KeyEvent.VK_LEFT){
             System.out.println("User pressed left key!");
             hero.setPosition(Direction.LEFT);
+            for (ImageTile i: roomManager.getTiles()
+            ) {
+                if(i instanceof Adversarios){
+                    ((Adversarios) i).movement();
+                }
+            }
 
         }
         if (keyPressed == KeyEvent.VK_RIGHT){
             System.out.println("User pressed right key!");
             hero.setPosition(Direction.RIGHT);
+            for (ImageTile i: roomManager.getTiles()
+            ) {
+                if(i instanceof Adversarios){
+                    ((Adversarios) i).movement();
+                }
+            }
         }
     }
 

@@ -11,7 +11,6 @@ public class Skeleton extends Adversarios{
     private int damage;
     private Position position;
 
-    Hero hero = Hero.getInstance();
 
     public Skeleton(Position position) {
         this.name = "Skeleton";
@@ -22,7 +21,7 @@ public class Skeleton extends Adversarios{
 
 
     private void moveNear() {
-        Position heroPosition = hero.getPosition();
+        Position heroPosition = Hero.getInstance().getPosition();
         int dx = heroPosition.getX() - position.getX();
         int dy = heroPosition.getY() - position.getY();
 
@@ -72,7 +71,7 @@ public class Skeleton extends Adversarios{
 
     @Override
     public void movement() {
-        int distância = distanceBetween(this.position, hero.getPosition());
+        int distância = distanceBetween(this.position, Hero.getInstance().getPosition());
         if (distância <= 3) {
             moveNear();
         } else {
