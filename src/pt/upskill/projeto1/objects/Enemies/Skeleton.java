@@ -1,11 +1,12 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.Enemies;
 
+import pt.upskill.projeto1.objects.Hero;
 import pt.upskill.projeto1.rogue.utils.Position;
 import pt.upskill.projeto1.rogue.utils.Vector2D;
 
 import java.util.Random;
 
-public class Skeleton extends Adversarios{
+public class Skeleton extends Enemies {
     private String name;
     private int health;
     private int damage;

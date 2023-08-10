@@ -1,11 +1,12 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.RoomObjects;
 
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Doors;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Door extends Doors {
 
-    private String name;
+    private String name = "DoorClosed";
     private Position position;
 
     private String nextRoom;

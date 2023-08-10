@@ -1,33 +1,34 @@
 package pt.upskill.projeto1.objects;
 
-import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Enemies.Enemies;
+import pt.upskill.projeto1.objects.RoomObjects.Door;
+import pt.upskill.projeto1.objects.RoomObjects.Wall;
 import pt.upskill.projeto1.rogue.utils.Position;
-import pt.upskill.projeto1.objects.Meat;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class RoomManager implements ImageTile {
 
-    private Room room0;
-    private Room room1;
-    private Room room2;
+    private ArrayList<Room> rooms = new ArrayList<>();
     private Room currentRoom;
-    private List<Adversarios> currentAdversarios = new ArrayList<>();
+    private List<Enemies> currentEnemies = new ArrayList<>();
     private Position position;
 
     public final static RoomManager INSTANCE = new RoomManager();
-    public RoomManager(){
-        room0 = new Room("rooms\\room0.txt");
-        room1 = new Room("rooms\\room1.txt");
-        room2 = new Room("rooms\\room2.txt");
-        this.currentRoom = room0;
-        this.currentAdversarios = currentRoom.getAdversarios();
+
+    private RoomManager(){
+
     }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+        this.currentEnemies.clear();
+        this.currentEnemies.addAll(currentRoom.getEnemies());
+    }
+
+
 
     public static RoomManager getInstance() {
         return INSTANCE;
@@ -67,7 +68,7 @@ public class RoomManager implements ImageTile {
         for (ImageTile tile:
                 currentRoom.getTiles()) {
             if(tile.getPosition().equals(position)){
-                if(tile instanceof Wall || tile instanceof Door || tile instanceof Adversarios || tile instanceof Hero){
+                if(tile instanceof Wall || tile instanceof Door || tile instanceof Enemies || tile instanceof Hero){
                     return true;
                 }
             }
@@ -81,22 +82,38 @@ public class RoomManager implements ImageTile {
         return this.currentRoom;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
-    }
-
     public List<ImageTile> getTiles(){
         return currentRoom.getTiles();
     }
 
-    public List<Adversarios> getCurrentAdversarios() {
-        return currentAdversarios;
+    public List<Enemies> getCurrentEnemies() {
+        return currentEnemies;
     }
 
     public void setCurrentAdversarios() {
-        this.currentAdversarios = currentRoom.getAdversarios();
+        this.currentEnemies = currentRoom.getEnemies();
     }
 
+
+
+/*    public void PickUp(Item item, Hero hero) {
+        if (!hero.getInventory().containsKey(0)) {
+            hero.getInventory().put(0, item);
+            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getInventory().remove(0);
+            //moveItemToOutOfView(item);
+        } else if (!hero.getInventory().containsKey(1)) {
+            hero.getInventory().put(1, item);
+            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getInventory().remove(1);
+            //moveItemToOutOfView(item);
+        } else if (!hero.getInventory().containsKey(2)) {
+            hero.getInventory().put(2, item);
+            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getInventory().remove(2);
+            //moveItemToOutOfView(item);
+        }
+    }*/
 
 
 

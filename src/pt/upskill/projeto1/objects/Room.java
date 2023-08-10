@@ -2,6 +2,16 @@ package pt.upskill.projeto1.objects;
 
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Enemies.BadGuy;
+import pt.upskill.projeto1.objects.Enemies.Bat;
+import pt.upskill.projeto1.objects.Enemies.Enemies;
+import pt.upskill.projeto1.objects.Enemies.Skeleton;
+import pt.upskill.projeto1.objects.Items.Key;
+import pt.upskill.projeto1.objects.Items.Meat;
+import pt.upskill.projeto1.objects.Items.Sword;
+import pt.upskill.projeto1.objects.RoomObjects.Door;
+import pt.upskill.projeto1.objects.RoomObjects.Floor;
+import pt.upskill.projeto1.objects.RoomObjects.Wall;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 import java.io.File;
@@ -11,24 +21,29 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Room implements ImageTile {
-
-    private Position position;
-    private List<ImageTile> tiles;
-    private Key key;
-    private List<Adversarios> adversarios = new ArrayList<>();
-    private List<Itens> itens = new ArrayList<>();
-    private List<Doors> doors = new ArrayList<>();
-    private String file;
-    public Room(List<ImageTile> tiles) {
+    private ArrayList<ImageTile> tiles = new ArrayList<ImageTile>();
+    private ArrayList<Enemies> enemyList = new ArrayList<Enemies>();
+    private ArrayList<Itens> itemList = new ArrayList<Itens>();
+    private ArrayList<Doors> doorList = new ArrayList<Doors>();
+    private ArrayList<Key> keyList = new ArrayList<Key>();
+    private String file = "/room/room0.txt";
+    
+    
+    public Room(ArrayList<ImageTile> tiles) {
         this.tiles = tiles;
     }
 
+    public Room(){}
+
     public Room(String file) {
         this.file = file;
+        readRoomFile(file);
     }
 
-    public List<ImageTile> readFile(String file)  {
-        List<ImageTile> tiles = new ArrayList<>();
+
+    public void readRoomFile(String file) {
+        this.file = file;
+        ArrayList<ImageTile> tiles = new ArrayList<>();
         try(Scanner reader = new Scanner(new File(file))){
             int y = 0;
             while(reader.hasNextLine()){
@@ -38,27 +53,28 @@ public class Room implements ImageTile {
                     if (instruções.length < 2) {
                         continue;
                     }
-                        if (instruções[1].equals("0") || instruções[1].equals("1") || instruções[1].equals("2")) {
-                            if (instruções.length < 4) {
-                                continue;
-                            }
-                            if (instruções[2].equals("D")) {
-                                String roomFileName = instruções[3];
-                                Door doorClosed = new Door("DoorClosed", roomFileName);
-                                    doors.add(doorClosed);
-                                    if (instruções.length >= 5) {
-                                    doorClosed.setKey(instruções[4]);
-                                }
-                            } else if (instruções[2].equals("E")) {
-                                String roomFileName = instruções[3];
-                                DoorWay doorWay = new DoorWay(roomFileName);
-                                doors.add(doorWay);
-                            }
-                        } else if (instruções[1].equals("k")) {
-                            key = new Key(instruções[2]);
+                    if (checkInteger(instruções[1])) {
+                        if (instruções.length < 4) {
+                            continue;
                         }
-                        continue;
+                        if (instruções[2].equals("D")) {
+                            String roomFileName = instruções[3];
+                            Door doorClosed = new Door("DoorClosed", roomFileName);
+                            doorList.add(doorClosed);
+                            if (instruções.length >= 5) {
+                                doorClosed.setKey(instruções[4]);
+                            }
+                        } else if (instruções[2].equals("E")) {
+                            String roomFileName = instruções[3];
+                            DoorWay doorWay = new DoorWay(roomFileName);
+                            doorList.add(doorWay);
+                        }
+                    } else if (instruções[1].equals("k")) {
+                        Key key = new Key(instruções[2]);
+                        keyList.add(key);
                     }
+                    continue;
+                }
                 String[] coluna = novaLinha.split("");
                 int x = 0;
                 for (String tile:
@@ -69,27 +85,27 @@ public class Room implements ImageTile {
                             break;
                         case "0":
                             tiles.add(new Floor(new Position(x, y)));
-                            doors.get(0).setPosition(new Position(x, y));
-                            tiles.add(doors.get(0));
+                            doorList.get(0).setPosition(new Position(x, y));
+                            tiles.add(doorList.get(0));
                             break;
                         case "1":
-                            doors.get(1).setPosition(new Position(x, y));
-                            tiles.add(doors.get(1));
+                            doorList.get(1).setPosition(new Position(x, y));
+                            tiles.add(doorList.get(1));
                             break;
                         case "2":
-                            doors.get(2).setPosition(new Position(x, y));
-                            tiles.add(doors.get(2));
+                            doorList.get(2).setPosition(new Position(x, y));
+                            tiles.add(doorList.get(2));
                             break;
                         case "k":
                             tiles.add(new Floor(new Position(x, y)));
-                            tiles.add(key);
-                            key.setPosition(new Position(x, y));
+                            tiles.add(keyList.get(0));
+                            keyList.get(0).setPosition(new Position(x, y));
                             break;
                         case "S":
                             tiles.add(new Floor(new Position(x, y)));
                             Skeleton skeleton = new Skeleton(new Position(x, y));
                             tiles.add(skeleton);
-                            adversarios.add(skeleton);
+                            enemyList.add(skeleton);
                             break;
                         case "H":
                             tiles.add(new Floor(new Position(x, y)));
@@ -97,27 +113,27 @@ public class Room implements ImageTile {
                             break;
                         case "B":
                             tiles.add(new Floor(new Position(x, y)));
-                            Bat bat = new  Bat(new Position(x, y));
+                            Bat bat = new Bat(new Position(x, y));
                             tiles.add(bat);
-                            adversarios.add(bat);
+                            enemyList.add(bat);
                             break;
                         case "G":
                             tiles.add(new Floor(new Position(x, y)));
                             BadGuy badGuy= new  BadGuy(new Position(x, y));
                             tiles.add(badGuy);
-                            adversarios.add(badGuy);
+                            enemyList.add(badGuy);
                             break;
                         case "m":
                             tiles.add(new Floor(new Position(x, y)));
                             Meat meat = new Meat(new Position(x, y));
                             tiles.add(meat);
-                            itens.add(meat);
+                            itemList.add(meat);
                             break;
                         case "s":
                             tiles.add(new Floor(new Position(x, y)));
                             Sword sword = new Sword(new Position(x, y));
                             tiles.add(sword);
-                            itens.add(sword);
+                            itemList.add(sword);
                             break;
                         default:
                             tiles.add(new Floor(new Position(x, y)));
@@ -131,9 +147,17 @@ public class Room implements ImageTile {
         } catch (FileNotFoundException e){
             System.out.println(e.getMessage());
         }
-        return tiles;
+        this.tiles = tiles;
     }
 
+    public boolean checkInteger(String num){
+        try {
+            Integer.parseInt(num);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
     public List<ImageTile> getTiles() {
         return tiles;
@@ -146,23 +170,23 @@ public class Room implements ImageTile {
                 return tile;
             }
         }
-        return null; // Return null if no tile is found at the specified position
+        return null;
     }
 
-    public List<Adversarios> getAdversarios() {
-        return adversarios;
+    public List<Enemies> getEnemies() {
+        return enemyList;
     }
 
     public List<Itens> getItens() {
-        return itens;
+        return itemList;
     }
 
     public List<Doors> getDoors() {
-        return doors;
+        return doorList;
     }
 
-    public Key getKey() {
-        return key;
+    public List<Key> getKey() {
+        return keyList;
     }
 
     @Override
@@ -172,7 +196,34 @@ public class Room implements ImageTile {
 
     @Override
     public Position getPosition() {
-        return position;
+        return null;
+    }
+
+
+    // novo código
+    public boolean findObstacle(Position position){
+        for (ImageTile tile:
+                tiles) {
+            if(tile.getPosition().equals(position)){
+                if(tile instanceof Wall || tile instanceof Door || tile instanceof Enemies || tile instanceof Hero){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Check a given position on the room, used for collision check and others
+    public ImageTile checkPosition(Position position) {
+        for (ImageTile tile : tiles) {
+            if (tile.getPosition().equals(position)) {
+                // If for a given position the object found is Not floor and Not Grass, return that object
+                if (!(tile instanceof Floor)) {
+                    return tile;
+                }
+            }
+        }
+        return null;
     }
 
 }

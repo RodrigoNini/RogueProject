@@ -1,8 +1,9 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.Items;
 
+import pt.upskill.projeto1.objects.Itens;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Sword extends Itens{
+public class Sword extends Itens {
 
     private String name = "Sword";
     private Position position;

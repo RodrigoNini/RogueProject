@@ -1,28 +1,44 @@
 package pt.upskill.projeto1.objects;
 
+import pt.upskill.projeto1.gui.FireTile;
+import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Items.Hammer;
+import pt.upskill.projeto1.objects.Items.Key;
+import pt.upskill.projeto1.objects.Items.Meat;
+import pt.upskill.projeto1.objects.RoomObjects.Fire;
+import pt.upskill.projeto1.objects.StatusObjects.Black;
+import pt.upskill.projeto1.objects.StatusObjects.Green;
+import pt.upskill.projeto1.objects.StatusObjects.Red;
+import pt.upskill.projeto1.objects.StatusObjects.RedGreen;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
 
 public class Hero implements ImageTile {
 
-    private int health = 4;
+    private int maxHealth = 8;
+    private int currentHealth;
     private int score = 100;
     private int damage = 1;
     private Position position;
     private ArrayList<Itens> inventory = new ArrayList<>();
     private int fireBalls = 3;
-    private Room currentRoom = RoomManager.getInstance().getCurrentRoom();
+    private Room currentRoom;
+    private HashMap<Integer, Itens> currentItems; // Stores Items in the item slot
 
     private Hero() {
 
     }
     private static final Hero INSTANCE = new Hero();
+
+    public void initCurrentRoom() {
+        currentRoom = RoomManager.getInstance().getCurrentRoom();
+    }
+
     @Override
     public String getName() {
         return "Hero";
@@ -47,6 +63,14 @@ public class Hero implements ImageTile {
             this.position = newPosition;
         }
 
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
     }
 
     public Room getCurrentRoom() {
@@ -124,10 +148,60 @@ public class Hero implements ImageTile {
     }
 
     public int getHealth() {
-        return health;
+        return currentHealth;
+    }
+    public int getDamage() {
+        return damage;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void takeDamage(int damage) {
+        this.currentHealth = currentHealth - damage;
     }
+
+
+    //items interaction section
+    // Add item picked up to a HashMap<Integer, FloorInteractables> with keys 1-3 which represent the respective item slots
+    public void addItem(Itens item) {
+        // Adds item to the first slot available (checked with containsKey() )
+        if (!(currentItems.containsKey(1))) {
+            currentItems.put(1, item);
+        } else if (!(currentItems.containsKey(2))) {
+            currentItems.put(2, item);
+        } else if (!(currentItems.containsKey(3))) {
+            currentItems.put(3, item);
+        }
+    }
+
+    // Check if there are item slots available, return TRUE if there are
+    public boolean itemSlotsAvailable() {
+        return (!(currentItems.containsKey(1) && currentItems.containsKey(2) && currentItems.containsKey(3)));
+    }
+
+
+    // Get Key from item slot
+    public Itens getKeyfromSlot(String keyName) {
+        for (int i = 1; i <= 3; i++) {
+            if (currentItems.get(i) instanceof Key) {
+                Key item = (Key) currentItems.get(i);
+                // only if the key matches the door keycode
+                if (item.getName().equals(keyName)){
+                    currentItems.remove(i);
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    // Restarts the hero state for restarting the game
+    public void resetState(){
+        this.currentHealth = maxHealth;
+        this.damage = 1; // start with 1 damage
+        this.score = 100;
+        //this.fireBalls = 3;
+    }
+
+
+
 }

@@ -1,13 +1,14 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.Items;
 
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Itens;
+import pt.upskill.projeto1.objects.Room;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Key extends Itens {
 
     private Position position;
     private String name;
-    private Room room;
 
     public Key(Position position) {
         this.position = position;
@@ -36,7 +37,6 @@ public class Key extends Itens {
 
     @Override
     public void use() {
-
     }
 
     @Override

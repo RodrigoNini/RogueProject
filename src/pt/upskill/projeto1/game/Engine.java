@@ -3,21 +3,29 @@ package pt.upskill.projeto1.game;
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.objects.*;
+import pt.upskill.projeto1.objects.Enemies.Enemies;
 import pt.upskill.projeto1.rogue.utils.Direction;
-import pt.upskill.projeto1.rogue.utils.Position;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.KeyListener;
 
 public class Engine {
     private RoomManager roomManager;
+    private Hero hero;
+
+    public Engine(){
+            roomManager = RoomManager.getInstance();
+            hero = Hero.getInstance();
+    }
+
     public void init(){
         roomManager = RoomManager.getInstance();
+        hero = Hero.getInstance();
+        Hero.getInstance().initCurrentRoom();
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-
-        List<ImageTile> tiles = new ArrayList<>(RoomManager.getInstance().getTiles());
+        List<ImageTile> tiles = new ArrayList<>();
+        tiles.add(RoomManager.getInstance().getCurrentRoom());
         tiles.add(Hero.getInstance());
 
 
@@ -37,15 +45,15 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
-        List<Adversarios> adversarios = RoomManager.getInstance().getCurrentAdversarios();
+        List<Enemies> Enemies = RoomManager.getInstance().getCurrentEnemies();
         Hero hero = Hero.getInstance();
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
             for (ImageTile i: roomManager.getTiles()
                  ) {
-                if(i instanceof Adversarios){
-                    ((Adversarios) i).movement();
+                if(i instanceof Enemies){
+                    ((Enemies) i).movement();
                 }
             }
         }
@@ -54,8 +62,8 @@ public class Engine {
             hero.setPosition(Direction.UP);
             for (ImageTile i: roomManager.getTiles()
             ) {
-                if(i instanceof Adversarios){
-                    ((Adversarios) i).movement();
+                if(i instanceof Enemies){
+                    ((Enemies) i).movement();
                 }
             }
         }
@@ -64,8 +72,8 @@ public class Engine {
             hero.setPosition(Direction.LEFT);
             for (ImageTile i: roomManager.getTiles()
             ) {
-                if(i instanceof Adversarios){
-                    ((Adversarios) i).movement();
+                if(i instanceof Enemies){
+                    ((Enemies) i).movement();
                 }
             }
 
@@ -75,8 +83,8 @@ public class Engine {
             hero.setPosition(Direction.RIGHT);
             for (ImageTile i: roomManager.getTiles()
             ) {
-                if(i instanceof Adversarios){
-                    ((Adversarios) i).movement();
+                if(i instanceof Enemies){
+                    ((Enemies) i).movement();
                 }
             }
         }
@@ -84,7 +92,6 @@ public class Engine {
 
 
     public static void main(String[] args){
-
         Engine engine = new Engine();
         engine.init();
     }

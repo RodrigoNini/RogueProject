@@ -1,17 +1,19 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.RoomObjects;
 
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Red implements ImageTile {
+public class Wall implements ImageTile {
+
     private Position position;
-    public Red(Position position) {
+
+    public Wall(Position position) {
         this.position = position;
     }
 
     @Override
     public String getName() {
-        return "Red";
+        return "Wall";
     }
 
     @Override
@@ -19,4 +21,3 @@ public class Red implements ImageTile {
         return position;
     }
 }
-

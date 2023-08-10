@@ -1,8 +1,9 @@
-package pt.upskill.projeto1.objects;
+package pt.upskill.projeto1.objects.Enemies;
 
+import pt.upskill.projeto1.objects.Enemies.Enemies;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class BadGuy extends Adversarios{
+public class BadGuy extends Enemies {
 
     private String name;
     private int health;
@@ -31,6 +32,7 @@ public class BadGuy extends Adversarios{
 
     }
 
+
     @Override
     public String getName() {
         return name;
@@ -46,7 +48,6 @@ public class BadGuy extends Adversarios{
     public void setHealth() {
 
     }
-
     @Override
     public int getDamage() {
         return damage;
