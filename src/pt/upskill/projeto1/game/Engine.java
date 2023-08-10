@@ -4,6 +4,7 @@ import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.objects.*;
 import pt.upskill.projeto1.objects.Enemies.Enemies;
+import pt.upskill.projeto1.objects.StatusObjects.StatusBar;
 import pt.upskill.projeto1.rogue.utils.Direction;
 
 import java.awt.event.KeyEvent;
@@ -15,26 +16,15 @@ public class Engine {
     private Hero hero;
 
     public Engine(){
-            roomManager = RoomManager.getInstance();
+            roomManager = RoomManager.getINSTANCE();
             hero = Hero.getInstance();
     }
 
     public void init(){
-        roomManager = RoomManager.getInstance();
-        hero = Hero.getInstance();
-        Hero.getInstance().initCurrentRoom();
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
-        List<ImageTile> tiles = new ArrayList<>();
-        tiles.add(RoomManager.getInstance().getCurrentRoom());
-        tiles.add(Hero.getInstance());
-
-
-        tiles.add(Hero.getInstance());
-        StatusBar statusBar = StatusBar.getINSTANCE();
-        gui.newStatusImages(statusBar.getStatusBar());
         gui.setEngine(this);
-        gui.newImages(tiles);
-
+        int startingRoom = 0;
+        roomManager.runRoomEngine(startingRoom);
         gui.go();
 
         gui.setStatus("O jogo começou!");
@@ -45,7 +35,7 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
-        List<Enemies> Enemies = RoomManager.getInstance().getCurrentEnemies();
+        List<Enemies> Enemies = RoomManager.getINSTANCE().getCurrentEnemies();
         Hero hero = Hero.getInstance();
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");

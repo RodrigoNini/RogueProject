@@ -1,16 +1,25 @@
 package pt.upskill.projeto1.objects.Items;
 
+import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Meat extends Itens {
-
+public abstract class Itens implements ImageTile {
     private String name;
     private Position position;
 
-    public Meat(Position position) {
-        this.name = "GoodMeat";
+    public Itens(){};
+    public Itens(Position position) {
         this.position = position;
     }
+    public Itens(String key) {
+        this.name = key;
+    }
+
+public void setPosition(Position position){
+    this.position = position;
+}
+
+public abstract boolean isWeapon();
 
     @Override
     public String getName() {
@@ -20,21 +29,5 @@ public class Meat extends Itens {
     @Override
     public Position getPosition() {
         return position;
-    }
-
-
-    @Override
-    public void use() {
-
-    }
-
-    @Override
-    public void drop() {
-
-    }
-
-    @Override
-    public boolean isWeapon() {
-        return false;
     }
 }

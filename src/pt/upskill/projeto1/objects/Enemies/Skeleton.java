@@ -14,10 +14,8 @@ public class Skeleton extends Enemies {
 
 
     public Skeleton(Position position) {
-        this.name = "Skeleton";
-        this.health = 2;
-        this.damage = 2;
-        this.position = position;
+        super("Skeleton", position, 2, 2);
+
     }
 
 
@@ -80,15 +78,7 @@ public class Skeleton extends Enemies {
         }
     }
 
-    @Override
-    public void attack() {
 
-    }
-
-    @Override
-    public void die() {
-
-    }
 
     @Override
     public String getName() {
@@ -96,27 +86,9 @@ public class Skeleton extends Enemies {
     }
 
     @Override
-    public int getHealth() {
-        return health;
-    }
-
-    @Override
-    public void setHealth() {
-
-    }
-
-    @Override
-    public int getDamage() {
-        return damage;
-    }
-
-    @Override
     public Position getPosition() {
         return position;
     }
 
-    @Override
-    public void setPosition() {
 
-    }
 }

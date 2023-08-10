@@ -1,18 +1,19 @@
 package pt.upskill.projeto1.objects.Enemies;
 
 import pt.upskill.projeto1.objects.Hero;
+
 import pt.upskill.projeto1.rogue.utils.Position;
 import pt.upskill.projeto1.rogue.utils.Vector2D;
 
 import java.util.Random;
 
-public class Bat extends Enemies {
+public class Thief extends Enemies{
+
+    private Hero hero = Hero.getInstance();
 
     private Position position;
-    Hero hero = Hero.getInstance();
-
-    public Bat(Position position) {
-        super("Bat", position, 2, 1);
+    public Thief(Position position) {
+        super("Thief", position, 5,3);
     }
 
 
@@ -57,9 +58,8 @@ public class Bat extends Enemies {
 
     @Override
     public String getName() {
-        return "Bat";
+        return "Thief";
     }
-
 
     @Override
     public Position getPosition() {

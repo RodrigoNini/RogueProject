@@ -1,28 +1,19 @@
 package pt.upskill.projeto1.objects.Items;
 
-import pt.upskill.projeto1.gui.ImageTile;
-import pt.upskill.projeto1.objects.Itens;
-import pt.upskill.projeto1.objects.Room;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Key extends Itens {
-
-    private Position position;
-    private String name;
+    private String door;
 
     public Key(Position position) {
-        this.position = position;
+        super(position);
     }
-    public Key(String name) {
-        this.name = name;
-    }
-
-    public String whichDoor(){
-        return name;
+    public Key(String door){
+        this.door = door;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public String getDoor() {
+        return door;
     }
 
     @Override
@@ -31,16 +22,7 @@ public class Key extends Itens {
     }
 
     @Override
-    public Position getPosition() {
-        return position;
-    }
-
-    @Override
-    public void use() {
-    }
-
-    @Override
-    public void drop() {
-
+    public boolean isWeapon() {
+        return false;
     }
 }
