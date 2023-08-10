@@ -44,19 +44,39 @@ public class StatusBar implements ImageTile {
         return INSTANCE;
     }
 
- public void manageFireBalls(){
-        int fireBalls = Hero.getInstance().getFireBalls();
-        if(fireBalls == 2){
-            statusList.get(2).po;
-        }
-        if(fireBalls == 1){
-            this.fireBalls.remove(1);
-        }
-        if(fireBalls == 0){
-            this.fireBalls.remove(0);
+ public void manageFireBalls() {
+     int fireBalls = Hero.getInstance().getFireBalls();
+        if (fireBalls == 3) {
+            ImageTile fireBall1 = new Fire(new Position(0, 0));
+            ImageTile fireBall2 = new Fire(new Position(1, 0));
+            ImageTile fireBall3 = new Fire(new Position(2, 0));
+            statusBar.add(fireBall1);
+            statusBar.add(fireBall2);
+            statusBar.add(fireBall3);
+        } else if (fireBalls == 2) {
+            ImageTile fireBall1 = new Fire(new Position(0, 0));
+            ImageTile fireBall2 = new Fire(new Position(1, 0));
+            ImageTile fireBall3 = new Black(new Position(2, 0));
+            statusBar.add(fireBall1);
+            statusBar.add(fireBall2);
+            statusBar.add(fireBall3);
+        } else if (fireBalls == 1) {
+            ImageTile fireBall1 = new Fire(new Position(0, 0));
+            ImageTile fireBall2 = new Black(new Position(1, 0));
+            ImageTile fireBall3 = new Black(new Position(2, 0));
+            statusBar.add(fireBall1);
+            statusBar.add(fireBall2);
+            statusBar.add(fireBall3);
+        } else if (fireBalls == 0) {
+            ImageTile fireBall1 = new Black(new Position(0, 0));
+            ImageTile fireBall2 = new Black(new Position(1, 0));
+            ImageTile fireBall3 = new Black(new Position(2, 0));
+            statusBar.add(fireBall1);
+            statusBar.add(fireBall2);
+            statusBar.add(fireBall3);
         }
 
-
+ }
     //Update game status bar
     public void updateStatus() {
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
@@ -121,7 +141,7 @@ public class StatusBar implements ImageTile {
         List<ImageTile> newItens = new ArrayList<>();
 
         for (Itens item : heroItens) {
-            if (item != null) {
+            if (!(item == null)) {
                 newItens.add(item);
             }
         }

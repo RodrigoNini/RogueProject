@@ -1,16 +1,7 @@
 package pt.upskill.projeto1.objects;
 
-import pt.upskill.projeto1.gui.FireTile;
-import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
-import pt.upskill.projeto1.objects.Items.Hammer;
 import pt.upskill.projeto1.objects.Items.Key;
-import pt.upskill.projeto1.objects.Items.Meat;
-import pt.upskill.projeto1.objects.RoomObjects.Fire;
-import pt.upskill.projeto1.objects.StatusObjects.Black;
-import pt.upskill.projeto1.objects.StatusObjects.Green;
-import pt.upskill.projeto1.objects.StatusObjects.Red;
-import pt.upskill.projeto1.objects.StatusObjects.RedGreen;
 import pt.upskill.projeto1.rogue.utils.Direction;
 import pt.upskill.projeto1.rogue.utils.Position;
 
@@ -139,11 +130,6 @@ public class Hero implements ImageTile {
     }*/
 
     public List<Itens> getInventory(){
-        //código apenas para testar
-        this.inventory = new ArrayList<>();
-        inventory.add(new Hammer(new Position(8,6)));
-        inventory.add(new Meat(new Position(3,3)));
-        inventory.add(new Key(new Position(6,3)));
         return  inventory;
     }
 
