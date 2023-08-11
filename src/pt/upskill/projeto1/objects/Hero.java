@@ -2,6 +2,7 @@ package pt.upskill.projeto1.objects;
 
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Enemies.Enemies;
 import pt.upskill.projeto1.objects.Items.ItemManager;
 import pt.upskill.projeto1.objects.Items.Itens;
 import pt.upskill.projeto1.objects.Items.Key;
@@ -31,6 +32,8 @@ public class Hero implements ImageTile {
     private int currentRoom = 0;
     private StatusBar statusBar = new StatusBar();
     private boolean isDead = false;
+
+    private int damage = 4;
 
 
     //    public Hero(Position position) {
@@ -69,9 +72,6 @@ public class Hero implements ImageTile {
     public int getNumberOfFireballs() {
         return fireBalls;
     }
-    //    public ArrayList<Fireball> getFireballList() {
-//        return fireballList;
-//    }
 
     public StatusBar getStatusBar() {
         return statusBar;
@@ -100,7 +100,6 @@ public class Hero implements ImageTile {
     public String getName() {
         return "Hero";
     }
-
     @Override
     public Position getPosition() {
         return position;
@@ -116,59 +115,63 @@ public class Hero implements ImageTile {
     public void update(Position position, RoomManager roomManager) {
         Room room = RoomManager.getINSTANCE().getCurrentRoom();
         ArrayList<ImageTile> tiles = roomManager.getCurrentRoom().getTiles();
-            if (room.findObstacle(position)) {
-                for (Door door : room.getDoorList()) {
-                    if (door.getPosition().equals(position) && door instanceof Door) {
-                        if (door.needsKey() && heroHasKey(door)) { //if (hero has key and it matches door key)
-                            door.setRequiresKey(false);
-                            door.setType("D");
-                            door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
-                            gui.setStatus("You have successfully opened the door!");
-                            break;
-                        } else if (door.needsKey() && !heroHasKey(door)) {
-                            gui.setStatus("You do not have the right key to open this door!");
-                        } else if (!door.needsKey()) {
-                            door.setType("D");
-                            door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
-                            break;
-                        }
-                    }
-                }
-            }
-            if (room.findObstacle(position)) {
-                for (Door door : room.getDoorList()) {
-                    if (door.getPosition().equals(getPosition()) && (door.getName().equals("DoorOpen") || door.getName().equals("DoorWay"))) {
-                        setCurrentRoom(door.getNextToRoom());
-                        RoomManager.getINSTANCE().changeRoom(door, getCurrentRoom(), Hero.getInstance()); // verificar sentido disto
-                        break; //this break is required or for loop will continue reading doors from the new room??
-                    }
-                }
-            }
-            if (room.findObstacle(position)) {
-                for (Itens item : room.getItemList()) {
-                    if (item.getPosition().equals(position) && item instanceof Meat) {
-                        restoreHealth();
-                        moveItemToOutOfView(item);
-                        gui.setStatus("You have eaten some food.");
+        if (room.findObstacle(position)) {
+            for (Door door : room.getDoorList()) {
+                if (door.getPosition().equals(position) && door instanceof Door) {
+                    if (door.needsKey() && heroHasKey(door)) { //if (hero has key and it matches door key)
+                        door.setRequiresKey(false);
+                        door.setType("D");
+                        door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
+                        gui.setStatus("You have successfully opened the door!");
                         break;
-                    } else if (item.getPosition().equals(position) && item.isWeapon()) {
-                        switchWeapon(item, roomManager);
-                        gui.setStatus("You have picked up a weapon.");
-//                    weapon = (Weapon) item;
-//                    moveItemToOutOfView(item);
-                        break;
-                    } else if (item.getPosition().equals(position) && item instanceof Key) {
-                        addToInventory(item);
-                        gui.setStatus("You have picked up a key.");
-                        break;
-                    } else if (item.getPosition().equals(position) && item instanceof Itens) {
-                        addToInventory(item);
-                        gui.setStatus("You have picked up an item.");
+                    } else if (door.needsKey() && !heroHasKey(door)) {
+                        gui.setStatus("You do not have the right key to open this door!");
+                    } else if (!door.needsKey()) {
+                        door.setType("D");
+                        door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
                         break;
                     }
                 }
             }
         }
+        if (room.findObstacle(position)) {
+            for (Door door : room.getDoorList()) {
+                if (door.getPosition().equals(getPosition()) && (door.getName().equals("DoorOpen") || door.getName().equals("DoorWay"))) {
+                    setCurrentRoom(door.getNextRoom());
+                    RoomManager.getINSTANCE().changeRoom(door, getCurrentRoom(), Hero.getInstance()); // verificar sentido disto
+                    break; //this break is required or for loop will continue reading doors from the new room??
+                }
+            }
+        }
+        if (room.findObstacle(position)) {
+            for (Itens item : room.getItemList()) {
+                if (item.getPosition().equals(position) && item instanceof Meat) {
+                    restoreHealth();
+                    moveItemToOutOfView(item);
+                    gui.setStatus("You have eaten some food.");
+                    break;
+                } else if (item.getPosition().equals(position) && item.isWeapon()) {
+                    switchWeapon(item, roomManager);
+                    gui.setStatus("You have picked up a weapon.");
+                    weapon = item;
+                    moveItemToOutOfView(item);
+                    break;
+                } else if (item.getPosition().equals(position) && item instanceof Key) {
+                    addToInventory(item);
+                    gui.setStatus("You have picked up a key.");
+                    break;
+                } else if (item.getPosition().equals(position) && item instanceof Itens) {
+                    addToInventory(item);
+                    gui.setStatus("You have picked up an item.");
+                    break;
+                }
+            }
+        }
+    }
+
+    public int getDamage() {
+        return damage;
+    }
 
     private boolean heroHasKey(Door door){
         for (Key key : keyList){
@@ -195,21 +198,21 @@ public class Hero implements ImageTile {
             inventory.put(0, item);
             if (item instanceof Key)
                 keyList.add((Key) item);
-            statusBar.update(getHealth(), fireBalls, inventory);
+            statusBar.update();
             //inventory.remove(0);
             //moveItemToOutOfView(item);
         } else if (!inventory.containsKey(1)) {
             inventory.put(1, item);
             if (item instanceof Key)
                 keyList.add((Key) item);
-            statusBar.update(getHealth(), fireBalls, inventory);
+            statusBar.update();
             //inventory.remove(0);
             //moveItemToOutOfView(item);
         } else if (!inventory.containsKey(2)) {
             inventory.put(2, item);
             if (item instanceof Key)
                 keyList.add((Key) item);
-            statusBar.update(getHealth(), fireBalls, inventory);
+            statusBar.update();
             //inventory.remove(0);
             //moveItemToOutOfView(item);
         }
@@ -238,7 +241,7 @@ public class Hero implements ImageTile {
         item.setPosition(new Position(9, -1));
     }
 
-    public void receiveDamage(int damage){
+    public void takeDamage(int damage){
         if (currentHealth - damage <= 0) {
             currentHealth = 0;
             this.dies();

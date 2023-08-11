@@ -13,18 +13,18 @@ public class ItemManager {
     public void PickUp(Itens item, Hero hero){
         if (!hero.getInventory().containsKey(0)){
             hero.getInventory().put(0, item);
-            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getStatusBar().update();
             hero.getInventory().remove(0);
             //moveItemToOutOfView(item);
         }
         else if (!hero.getInventory().containsKey(1)){
             hero.getInventory().put(1, item);
-            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getStatusBar().update();
             hero.getInventory().remove(1);
             //moveItemToOutOfView(item);
         } else if (!hero.getInventory().containsKey(2)){
             hero.getInventory().put(2, item);
-            hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+            hero.getStatusBar().update();
             hero.getInventory().remove(2);
             //moveItemToOutOfView(item);
         }

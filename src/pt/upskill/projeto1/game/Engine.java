@@ -41,7 +41,7 @@ public class Engine {
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
             for (ImageTile i: roomManager.getCurrentRoom().getTiles()
-                 ) {
+            ) {
                 if(i instanceof Enemies){
                     ((Enemies) i).movement();
                 }
@@ -66,7 +66,6 @@ public class Engine {
                     ((Enemies) i).movement();
                 }
             }
-
         }
         if (keyPressed == KeyEvent.VK_RIGHT){
             System.out.println("User pressed right key!");
@@ -78,6 +77,16 @@ public class Engine {
                 }
             }
         }
+
+            for (Enemies enemy : RoomManager.getINSTANCE().getCurrentRoom().getEnemyList()) {
+                if (enemy.getPosition().equals(Hero.getInstance().getPosition())) {
+                    int enemyDamage = enemy.getDamage();
+                    Hero.getInstance().takeDamage(enemyDamage);
+                    enemy.takeDamage(Hero.getInstance().getDamage());
+                    StatusBar.getInstance().update();
+                }
+
+            }
     }
 
 

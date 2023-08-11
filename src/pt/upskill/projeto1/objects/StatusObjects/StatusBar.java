@@ -2,6 +2,7 @@ package pt.upskill.projeto1.objects.StatusObjects;
 
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+import pt.upskill.projeto1.objects.Hero;
 import pt.upskill.projeto1.objects.Items.Itens;
 import pt.upskill.projeto1.rogue.utils.Position;
 
@@ -11,6 +12,12 @@ import java.util.HashMap;
 public class StatusBar implements ImageTile {
     ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
     private ArrayList<ImageTile> statusList = new ArrayList<>();
+
+    private static final StatusBar INSTANCE = new StatusBar();
+    public static StatusBar getInstance(){
+        return INSTANCE;
+    }
+
     public StatusBar() {}
     public ArrayList<ImageTile> getStatusList() {
         return statusList;
@@ -70,7 +77,11 @@ public class StatusBar implements ImageTile {
             key++;
         }
     }
-    public void update(int health, int numberOfFireballs, HashMap<Integer, Itens> inventory){
+    public void update(){
+        Hero hero = Hero.getInstance();
+        int health = hero.getHealth();
+        int numberOfFireballs = hero.getNumberOfFireballs();
+        HashMap<Integer, Itens> inventory = hero.getInventory();
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
         statusList.clear();
         for (int i = 0; i < 10; i++){

@@ -17,19 +17,18 @@ public class Door implements ImageTile {
     public Door(Position position) {
         this.position = position;
     }
-    public Door(String number, String type, String nextRoom, String nextDoor){
-        this.number = number;
-        this.type = type;
-        this.nextDoor = nextDoor;
-        this.nextRoom = nextRoom;
-    }
-    public Door(String number, String type, String nextRoom, String nextDoor, String requiredKey){
-        this(number, type, nextRoom, nextDoor);
-        this.requiredKey = requiredKey;
-        needsKey = true;
+    public Door(){
     }
 
-    public int getNextToRoom() {
+    public void setNextRoom(String nextRoom) {
+        this.nextRoom = nextRoom;
+    }
+
+    public void setNextDoor(String nextDoor) {
+        this.nextDoor = nextDoor;
+    }
+
+    public int getNextRoom() {
         switch (nextRoom){
             case "room1.txt":
                 return (1);
@@ -66,6 +65,9 @@ public class Door implements ImageTile {
         return requiredKey;
     }
 
+    public void setRequiredKey(String requiredKey) {
+        this.requiredKey = requiredKey;
+    }
     public void setType(String type) {
         this.type = type;
     }
@@ -99,16 +101,4 @@ public class Door implements ImageTile {
         this.position = position;
     }
 
-    @Override
-    public String toString() {
-        return "Door{" +
-                "position=" + position +
-                ", number='" + number + '\'' +
-                ", type='" + type + '\'' +
-                ", nextRoom='" + nextRoom + '\'' +
-                ", nextDoor='" + nextDoor + '\'' +
-                ", requiredKey='" + requiredKey + '\'' +
-                ", isOpen=" + isOpen +
-                '}';
-    }
 }

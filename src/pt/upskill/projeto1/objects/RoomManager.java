@@ -49,18 +49,14 @@ public class RoomManager implements ImageTile {
 
     }
     public void runRoomEngine(int roomNumber){ //initiates all visual elements
-
-        hero.setPosition(new Position(6,8));
-        hero.getStatusBar().update(hero.getHealth(), hero.getNumberOfFireballs(), hero.getInventory());
+        hero.getStatusBar().update();
         gui.clearImages();
         currentRoom = getRoom(roomNumber);
         ArrayList<ImageTile> mapTiles;
         mapTiles = currentRoom.getTiles();
         ItemManager itemObserver = new ItemManager(gui);
-        hero.setPosition(new Position(4, 3));
         mapTiles.add(hero);
-        //gui.setStatus();
-        //gui.addStatusImage();
+        //gui.addStatusImage(Hero.getInstance().getStatusBar());
         gui.newImages(mapTiles);
     }
     public void changeRoom(Door previousDoor, int nextRoomNumber, Hero hero){ //set visual elements to next room
@@ -74,12 +70,24 @@ public class RoomManager implements ImageTile {
         for (ImageTile tile:
                 currentRoom.getTiles()) {
             if(tile.getPosition().equals(position)){
-                if(tile instanceof Wall || tile instanceof Door || tile instanceof Enemies || tile instanceof Hero){
+                if(tile instanceof Wall || isClosedDoor(position) || tile instanceof Enemies || tile instanceof Hero){
                     return true;
                 }
-            }
+            }               //possivelmente ter que criar classe de portas fechadas
         }
         return false;
+    }
+
+    public boolean isClosedDoor(Position position) {
+        for (Door door : getCurrentRoom().getDoorList()) {
+            if (door.getPosition().equals(position) && door.getName().equals("DoorClosed"))
+                return true;
+        }
+        return false;
+    }
+
+    public void removeEnemy(Enemies enemy){
+        currentRoom.getTiles().remove(enemy);
     }
 
     @Override

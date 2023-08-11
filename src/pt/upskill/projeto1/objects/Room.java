@@ -22,7 +22,7 @@ public class Room implements ImageTile {
     private ArrayList<Itens> itemList = new ArrayList<>();
     private ArrayList<Door> doorList = new ArrayList<>();
     private ArrayList<Key> keyList = new ArrayList<>();
-    private String roomPath = "./rooms/room0.txt";
+    private String roomFile = "./rooms/room0.txt";
     private int roomNumber;
 
     public Room(ArrayList<ImageTile> tiles) {
@@ -52,7 +52,7 @@ public class Room implements ImageTile {
         return keyList;
     }
 
-    public String getRoomPath() { //get room path for hero's current room
+    public String getRoomFile() { //get room path for hero's current room
         switch (roomNumber) {
             case 1:
                 return ("./rooms/room1.txt");
@@ -74,83 +74,112 @@ public class Room implements ImageTile {
                 tiles.add(new Floor(new Position(x, y)));
             }
         }
-        try (Scanner roomFile = new Scanner(new File(getRoomPath()))) {
+        try (Scanner reader = new Scanner(new File(getRoomFile()))) {
             int y = 0;
-            String line = "";
-            while (roomFile.hasNextLine()) {
-                line = roomFile.nextLine();
-                if (line.charAt(0) == '#') {
-                    String[] tokens = line.split(" ");
-                    switch (tokens.length) {
-                        case 6:
-                            doorList.add(new Door(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5]));
-                            break;
-                        case 5:
-                            doorList.add(new Door(tokens[1], tokens[2], tokens[3], tokens[4]));
-                            break;
-                        case 3:
-                            keyList.add(new Key(tokens[2]));
-                            break;
-                    }
-                    continue;
-                }
-                for (int x = 0; x < line.length(); x++) {
-                    char character = line.charAt(x);
-                    switch (character) {
-                        case 'W': //wall
-                            tiles.add(new Wall(new Position(x, y)));
-                            break;
-                        case 'S': //skeleton
-                            Skeleton skeleton = new Skeleton(new Position(x, y));
-                            tiles.add(skeleton);
-                            enemyList.add(skeleton);
-                            break;
-                        case 'G': //bad guy
-                            BadGuy badguy = new BadGuy(new Position(x, y));
-                            tiles.add(badguy);
-                            enemyList.add(badguy);
-                            break;
-                        case 'T': //thief
-                            Thief thief = new Thief(new Position(x, y));
-                            tiles.add(thief);
-                            enemyList.add(thief);
-                            break;
-                        case 'm': //meat
-                            Meat meat = new Meat(new Position(x, y));
-                            tiles.add(meat);
-                            itemList.add(meat);
-                            break;
-                        case 'k': //key
-                            Key key = keyList.get(0);
-                            key.setPosition(new Position(x, y));
-                            tiles.add(key);
-                            itemList.add(key);
-                            break;
-                        case 's': //sword
-                            Sword sword = new Sword(new Position(x, y));
-                            tiles.add(sword);
-                            itemList.add(sword);
-                            break;
-                        case 'H': //hammer
-                            Hammer hammer = new Hammer(new Position(x, y));
-                            tiles.add(hammer);
-                            itemList.add(hammer);
-                            break;
-                        default: //door
-                            if (Character.isDigit(character)) {
-                                int i = character - '0';
-                                Door door = doorList.get(i);
-                                door.setPosition(new Position(x, y));
-                                tiles.add(door);
-                                doorList.add(door);
+            while (reader.hasNextLine()) {
+                String newLine = reader.nextLine();
+                if (newLine.startsWith("#")) {
+                    String[] instructions = newLine.split(" ");
+                    if (instructions.length >= 3) {
+                        if (instructions[2].equals("D")) {
+                            Door door = new Door();
+                            door.setType("D");
+                            door.setNextRoom(instructions[3]);
+                            door.setNextDoor(instructions[4]);
+                            doorList.add(door);
+                            door.setRequiresKey(instructions.length >= 6);
+                            if (door.needsKey()) {
+                                door.setRequiredKey(instructions[5]);
                             }
-
+                        } else if (instructions[2].equals("E")) {
+                            Door doorWay = new Door();
+                            doorWay.setType("E");
+                            doorWay.setNextRoom(instructions[3]);
+                            doorList.add(doorWay);
+                        } else if (instructions[2].equals("k") && instructions.length >= 4) {
+                            keyList.add(new Key(instructions[3]));
+                        }
                     }
+                } else {
+                    String[] coluna = newLine.split("");
+                    int x = 0;
+                    for (String tile : coluna) {
+                        switch (tile) {
+                            case "W":
+                                tiles.add(new Wall(new Position(x, y)));
+                                break;
+                            case "0":
+                            case "1":
+                            case "2":
+                                int doorIndex = Integer.parseInt(tile);
+                                if (doorIndex < doorList.size()) {
+                                    Door door = doorList.get(doorIndex);
+                                    door.setPosition(new Position(x, y));
+                                    tiles.add(door);
+                                }
+                                break;
+                            case "k":
+                                tiles.add(new Floor(new Position(x, y)));
+                                if (!keyList.isEmpty()) {
+                                    Key key = keyList.get(0);
+                                    key.setPosition(new Position(x, y));
+                                    tiles.add(key);
+                                }
+                                break;
+                            case "S":
+                                tiles.add(new Floor(new Position(x, y)));
+                                Skeleton skeleton = new Skeleton(new Position(x, y));
+                                tiles.add(skeleton);
+                                enemyList.add(skeleton);
+                                break;
+                            case "H":
+                                tiles.add(new Floor(new Position(x, y)));
+                                Hero.getInstance().setPosition(new Position(x, y));
+                                break;
+                            case "B":
+                                tiles.add(new Floor(new Position(x, y)));
+                                Bat bat = new Bat(new Position(x, y));
+                                tiles.add(bat);
+                                enemyList.add(bat);
+                                break;
+                            case "G":
+                                tiles.add(new Floor(new Position(x, y)));
+                                BadGuy badGuy = new BadGuy(new Position(x, y));
+                                tiles.add(badGuy);
+                                enemyList.add(badGuy);
+                                break;
+                            case "m":
+                                tiles.add(new Floor(new Position(x, y)));
+                                Meat meat = new Meat(new Position(x, y));
+                                tiles.add(meat);
+                                itemList.add(meat);
+                                break;
+                            case "s":
+                                tiles.add(new Floor(new Position(x, y)));
+                                Sword sword = new Sword(new Position(x, y));
+                                tiles.add(sword);
+                                itemList.add(sword);
+                                break;
+                            default:
+                                tiles.add(new Floor(new Position(x, y)));
+                                break;
+                        }
+                        x++;
+                    }
+                    y++;
                 }
-                y++;
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            } catch(FileNotFoundException e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+    private boolean checkInteger(String instructions) {
+        try{
+            Integer.parseInt(instructions);
+            return true;
+        } catch (NumberFormatException e){
+            return false;
         }
     }
 
@@ -173,7 +202,9 @@ public class Room implements ImageTile {
         return false;
     }
 
-
+    public void removeEnemy(Enemies enemy){
+        getTiles().remove(enemy);
+    }
     public ArrayList<ImageTile> getTiles() {
         return tiles;
     }

@@ -1,6 +1,7 @@
 package pt.upskill.projeto1.objects.Enemies;
 
 import pt.upskill.projeto1.objects.Hero;
+import pt.upskill.projeto1.objects.RoomManager;
 import pt.upskill.projeto1.rogue.utils.Position;
 import pt.upskill.projeto1.rogue.utils.Vector2D;
 
@@ -18,8 +19,8 @@ public class Skeleton extends Enemies {
 
     private void moveNear() {
         Position heroPosition = Hero.getInstance().getPosition();
-        int dx = heroPosition.getX() - position.getX();
-        int dy = heroPosition.getY() - position.getY();
+        int dx = heroPosition.getX() - super.getPosition().getX();
+        int dy = heroPosition.getY() - super.getPosition().getY();
 
         if (Math.abs(dx) > Math.abs(dy)) {
             // Movimento horizontal
@@ -31,7 +32,7 @@ public class Skeleton extends Enemies {
             dy = dy > 0 ? 1 : -1; // Se dy for positivo, movimento para baixo, caso contrário, movimento para cima
         }
 
-        position = position.plus(new Vector2D(dx, dy));
+        super.setPosition(super.getPosition().plus(new Vector2D(dx, dy)));
     }
 
     private void moveRandom() {
@@ -67,25 +68,20 @@ public class Skeleton extends Enemies {
 
     @Override
     public void movement() {
-        int distance = distanceBetween(this.position, Hero.getInstance().getPosition());
-        if (distance <= 3) {
-            moveNear();
-        } else {
-            moveRandom();
+        if(RoomManager.getINSTANCE().findObstacle(super.getPosition())){
+            int distance = distanceBetween(super.getPosition(), Hero.getInstance().getPosition());
+            if (distance <= 3) {
+                moveNear();
+            } else {
+                moveRandom();
+            }
         }
+
     }
-
-
 
     @Override
     public String getName() {
         return "Skeleton";
     }
-
-    @Override
-    public Position getPosition() {
-        return position;
-    }
-
 
 }
