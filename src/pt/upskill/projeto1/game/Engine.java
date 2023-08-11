@@ -35,12 +35,12 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
-        List<Enemies> Enemies = RoomManager.getINSTANCE().getCurrentEnemies();
+        List<Enemies> Enemies = RoomManager.getINSTANCE().getCurrentRoom().getEnemyList();
         Hero hero = Hero.getInstance();
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
             hero.setPosition(Direction.DOWN);
-            for (ImageTile i: roomManager.getTiles()
+            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
                  ) {
                 if(i instanceof Enemies){
                     ((Enemies) i).movement();
@@ -50,7 +50,7 @@ public class Engine {
         if (keyPressed == KeyEvent.VK_UP){
             System.out.println("User pressed up key!");
             hero.setPosition(Direction.UP);
-            for (ImageTile i: roomManager.getTiles()
+            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
             ) {
                 if(i instanceof Enemies){
                     ((Enemies) i).movement();
@@ -60,7 +60,7 @@ public class Engine {
         if (keyPressed == KeyEvent.VK_LEFT){
             System.out.println("User pressed left key!");
             hero.setPosition(Direction.LEFT);
-            for (ImageTile i: roomManager.getTiles()
+            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
             ) {
                 if(i instanceof Enemies){
                     ((Enemies) i).movement();
@@ -71,7 +71,7 @@ public class Engine {
         if (keyPressed == KeyEvent.VK_RIGHT){
             System.out.println("User pressed right key!");
             hero.setPosition(Direction.RIGHT);
-            for (ImageTile i: roomManager.getTiles()
+            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
             ) {
                 if(i instanceof Enemies){
                     ((Enemies) i).movement();

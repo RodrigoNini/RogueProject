@@ -3,6 +3,8 @@ package pt.upskill.projeto1.objects.Items;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Key extends Itens {
+
+    private Position position;
     private String door;
 
     public Key(Position position) {
@@ -24,5 +26,10 @@ public class Key extends Itens {
     @Override
     public boolean isWeapon() {
         return false;
+    }
+
+    @Override
+    public Position getPosition() {
+        return position;
     }
 }

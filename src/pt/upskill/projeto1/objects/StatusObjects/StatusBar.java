@@ -94,4 +94,4 @@ public class StatusBar implements ImageTile {
     }
 }
 
-}
+

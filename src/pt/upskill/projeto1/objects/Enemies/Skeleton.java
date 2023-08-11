@@ -7,9 +7,6 @@ import pt.upskill.projeto1.rogue.utils.Vector2D;
 import java.util.Random;
 
 public class Skeleton extends Enemies {
-    private String name;
-    private int health;
-    private int damage;
     private Position position;
 
 
@@ -70,8 +67,8 @@ public class Skeleton extends Enemies {
 
     @Override
     public void movement() {
-        int distância = distanceBetween(this.position, Hero.getInstance().getPosition());
-        if (distância <= 3) {
+        int distance = distanceBetween(this.position, Hero.getInstance().getPosition());
+        if (distance <= 3) {
             moveNear();
         } else {
             moveRandom();
@@ -82,7 +79,7 @@ public class Skeleton extends Enemies {
 
     @Override
     public String getName() {
-        return name;
+        return "Skeleton";
     }
 
     @Override

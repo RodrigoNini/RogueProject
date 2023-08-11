@@ -4,12 +4,11 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Sword extends Itens {
 
-    private String name = "Sword";
     private Position position;
 
     private int damage;
 
-public Sword(Position position) {
+    public Sword(Position position) {
         this.position = position;
     }
 
@@ -21,16 +20,6 @@ public Sword(Position position) {
     @Override
     public Position getPosition() {
         return position;
-    }
-
-    @Override
-    public void use() {
-
-    }
-
-    @Override
-    public void drop() {
-
     }
 
     @Override

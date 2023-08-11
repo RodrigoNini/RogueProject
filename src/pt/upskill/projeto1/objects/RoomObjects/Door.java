@@ -74,6 +74,10 @@ public class Door implements ImageTile {
         isOpen = open;
     }
 
+    public boolean isOpen() {
+        return isOpen;
+    }
+
     @Override
     public String getName() {
         if (type.equals("E")){

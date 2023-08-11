@@ -4,8 +4,6 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Hammer extends Itens {
 
-    private String name = "Hammer";
-
     private Position position;
 
     public Hammer(Position position) {
@@ -22,15 +20,7 @@ public class Hammer extends Itens {
         return position;
     }
 
-    @Override
-    public void use() {
 
-    }
-
-    @Override
-    public void drop() {
-
-    }
 
     @Override
     public boolean isWeapon() {

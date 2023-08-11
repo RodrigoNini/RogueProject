@@ -55,7 +55,7 @@ public class RoomManager implements ImageTile {
         gui.clearImages();
         currentRoom = getRoom(roomNumber);
         ArrayList<ImageTile> mapTiles;
-        mapTiles = currentRoom.getMapTiles();
+        mapTiles = currentRoom.getTiles();
         ItemManager itemObserver = new ItemManager(gui);
         hero.setPosition(new Position(4, 3));
         mapTiles.add(hero);
@@ -63,12 +63,12 @@ public class RoomManager implements ImageTile {
         //gui.addStatusImage();
         gui.newImages(mapTiles);
     }
-   /* public void changeRoom(Door previousDoor, int nextRoomNumber, Hero hero){ //set visual elements to next room
+    public void changeRoom(Door previousDoor, int nextRoomNumber, Hero hero){ //set visual elements to next room
 
         int nextDoor = previousDoor.getNextDoor();
         runRoomEngine(nextRoomNumber);
         hero.setPosition(currentRoom.getDoorList().get(nextDoor).getPosition());
-    }*/
+    }
 
     public boolean findObstacle(Position position){
         for (ImageTile tile:
@@ -84,11 +84,11 @@ public class RoomManager implements ImageTile {
 
     @Override
     public String getName() {
-        return null;
+        return "RoomManager";
     }
 
     @Override
     public Position getPosition() {
-        return null;
+        return new Position(0,0);
     }
 }

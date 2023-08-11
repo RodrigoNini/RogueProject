@@ -92,6 +92,10 @@ public class Hero implements ImageTile {
         this.hasWeapon = hasWeapon;
     }
 
+    public void restoreHealth(){
+        currentHealth = maxHealth;
+    }
+
     @Override
     public String getName() {
         return "Hero";
@@ -99,7 +103,7 @@ public class Hero implements ImageTile {
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
     }
 //    public String getCurrentRoom() {
 //        return currentRoom;
@@ -109,20 +113,21 @@ public class Hero implements ImageTile {
 //        this.currentRoom = currentRoom;
 //    }
 
-    public void update(int keyPressed, RoomManager roomManager) {
-
-            if (room.isClosedDoor(nextPosition)) {
+    public void update(Position position, RoomManager roomManager) {
+        Room room = RoomManager.getINSTANCE().getCurrentRoom();
+        ArrayList<ImageTile> tiles = roomManager.getCurrentRoom().getTiles();
+            if (room.findObstacle(position)) {
                 for (Door door : room.getDoorList()) {
-                    if (door.getPosition().equals(nextPosition) && door instanceof Door) {
+                    if (door.getPosition().equals(position) && door instanceof Door) {
                         if (door.needsKey() && heroHasKey(door)) { //if (hero has key and it matches door key)
                             door.setRequiresKey(false);
                             door.setType("D");
                             door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
                             gui.setStatus("You have successfully opened the door!");
                             break;
-                        } else if (door.requiresKey() && !heroHasKey(door)) {
+                        } else if (door.needsKey() && !heroHasKey(door)) {
                             gui.setStatus("You do not have the right key to open this door!");
-                        } else if (!door.requiresKey()) {
+                        } else if (!door.needsKey()) {
                             door.setType("D");
                             door.setOpen(true); //"D" and "true" are required for Door to [getName() = "DoorOpen"]
                             break;
@@ -130,33 +135,33 @@ public class Hero implements ImageTile {
                     }
                 }
             }
-            if (room.isOpenDoor(getPosition())) {
+            if (room.findObstacle(position)) {
                 for (Door door : room.getDoorList()) {
                     if (door.getPosition().equals(getPosition()) && (door.getName().equals("DoorOpen") || door.getName().equals("DoorWay"))) {
                         setCurrentRoom(door.getNextToRoom());
-                        map.changeRoom(door, getCurrentRoom(), this);
+                        RoomManager.getINSTANCE().changeRoom(door, getCurrentRoom(), Hero.getInstance()); // verificar sentido disto
                         break; //this break is required or for loop will continue reading doors from the new room??
                     }
                 }
             }
-            if (room.isItem(getPosition())) {
+            if (room.findObstacle(position)) {
                 for (Itens item : room.getItemList()) {
-                    if (item.getPosition().equals(nextPosition) && item instanceof Meat) {
-                        super.addHealth(((Meat) item).getHealthValue());
+                    if (item.getPosition().equals(position) && item instanceof Meat) {
+                        restoreHealth();
                         moveItemToOutOfView(item);
                         gui.setStatus("You have eaten some food.");
                         break;
-                    } else if (item.getPosition().equals(nextPosition) && item instanceof Weapon) {
-                        switchWeapon((Weapon) item, map);
+                    } else if (item.getPosition().equals(position) && item.isWeapon()) {
+                        switchWeapon(item, roomManager);
                         gui.setStatus("You have picked up a weapon.");
 //                    weapon = (Weapon) item;
 //                    moveItemToOutOfView(item);
                         break;
-                    } else if (item.getPosition().equals(nextPosition) && item instanceof Key) {
+                    } else if (item.getPosition().equals(position) && item instanceof Key) {
                         addToInventory(item);
                         gui.setStatus("You have picked up a key.");
                         break;
-                    } else if (item.getPosition().equals(nextPosition) && item instanceof Item) {
+                    } else if (item.getPosition().equals(position) && item instanceof Itens) {
                         addToInventory(item);
                         gui.setStatus("You have picked up an item.");
                         break;
@@ -165,17 +170,9 @@ public class Hero implements ImageTile {
             }
         }
 
-
-    private boolean isOutOfBounds(Position position){ //checks if hero is out of visual tiles
-        if (position.getX() == -1 || position.getX() == 10)
-            return true;
-        if (position.getY() == -1 || position.getY() == 10)
-            return true;
-        return false;
-    }
     private boolean heroHasKey(Door door){
         for (Key key : keyList){
-            if (door.getRequiredKey().equals(key.getKeyName()))
+            if (door.getRequiredKey().equals(key.getDoor()))
                 return true;
         }
         return false;

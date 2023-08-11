@@ -39,6 +39,6 @@ public class FireBall implements FireTile {
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
     }
 }
