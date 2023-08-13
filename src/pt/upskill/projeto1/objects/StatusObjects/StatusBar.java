@@ -2,39 +2,36 @@ package pt.upskill.projeto1.objects.StatusObjects;
 
 import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
+
+
 import pt.upskill.projeto1.objects.Hero;
 import pt.upskill.projeto1.objects.Items.Itens;
+
 import pt.upskill.projeto1.rogue.utils.Position;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StatusBar implements ImageTile {
+public class StatusBar {
     ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
     private ArrayList<ImageTile> statusList = new ArrayList<>();
-
+    public StatusBar() {}
     private static final StatusBar INSTANCE = new StatusBar();
-    public static StatusBar getInstance(){
+
+    public static StatusBar getInstance() {
         return INSTANCE;
     }
 
-    public StatusBar() {}
-    public ArrayList<ImageTile> getStatusList() {
-        return statusList;
-    }
 
-    public void setStatusList(ArrayList<ImageTile> statusList) {
-        this.statusList = statusList;
-    }
     public void getFireBalls(int numberOfFireballs){
-//        for (int i = 0; i < numberOfFireballs; i++){
-//            FireTile fireball = new Fireball(new Position(i, 0));
-//            statusList.add(fireball);
-//        }
+        for (int i = 0; i < numberOfFireballs; i++){
+           Fire fireball = new Fire(new Position(i, 0));
+           statusList.add(fireball);
+       }
     }
     public void getHealth(int health){
         for (int i = 3; i <= 6; i++){
-            statusList.add(new Green(new Position(i, 0))); //set life bar to green
+            statusList.add(new Green(new Position(i, 0)));
         }
         if (health < 8){
             statusList.add(new RedGreen(new Position(6, 0)));
@@ -42,7 +39,7 @@ public class StatusBar implements ImageTile {
         if (health < 7){
             statusList.add(new Red(new Position(6, 0)));
         }
-        if (health < 6){
+        if (health < 7){
             statusList.add(new RedGreen(new Position(5, 0)));
         }
         if (health < 5){
@@ -61,31 +58,27 @@ public class StatusBar implements ImageTile {
         }
         if (health < 1){
             statusList.add(new Red(new Position(3, 0)));
-            gui.setStatus("Foste de Base");
+            Hero.getInstance().dies();
         }
     }
     public void getInventory(HashMap<Integer, Itens> inventory){
-        int key = 0;
         for (int i = 7; i < 10; i++){
-            if (inventory.containsKey(key)){
-                Position position = new Position(i, 0);
-                Itens copyOfItem = inventory.get(key);
-                //inventory.remove(key);
+            if (inventory.containsKey(i - 7)){
+                Position position = new Position(i, -1);
+                Itens copyOfItem = inventory.get(i - 7);
                 copyOfItem.setPosition(position);
                 statusList.add((ImageTile) copyOfItem);
             }
-            key++;
         }
     }
     public void update(){
-        Hero hero = Hero.getInstance();
-        int health = hero.getHealth();
-        int numberOfFireballs = hero.getNumberOfFireballs();
-        HashMap<Integer, Itens> inventory = hero.getInventory();
+        int health = Hero.getInstance().getCurrentHealth();
+        int numberOfFireballs = Hero.getInstance().getNumberOfFireballs();
+        HashMap<Integer, Itens> inventory = Hero.getInstance().getInventory();
         ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
         statusList.clear();
         for (int i = 0; i < 10; i++){
-            statusList.add(new Black(new Position(i, 0))); //set everything black
+            statusList.add(new Black(new Position(i, 0)));
         }
         getHealth(health);
         getFireBalls(numberOfFireballs);
@@ -93,16 +86,4 @@ public class StatusBar implements ImageTile {
         gui.newStatusImages(statusList);
 
     }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public Position getPosition() {
-        return null;
-    }
 }
-
-

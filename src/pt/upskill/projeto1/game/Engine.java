@@ -12,12 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Engine {
-    private RoomManager roomManager;
-    private Hero hero;
+    private RoomManager roomManager = RoomManager.getInstance();
+    private Hero hero = Hero.getInstance();
 
     public Engine(){
-            roomManager = RoomManager.getINSTANCE();
-            hero = Hero.getInstance();
+
     }
 
     public void init(){
@@ -35,58 +34,60 @@ public class Engine {
     }
 
     public void notify(int keyPressed){
-        List<Enemies> Enemies = RoomManager.getINSTANCE().getCurrentRoom().getEnemyList();
+        ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
         Hero hero = Hero.getInstance();
+        List<Enemies> enemiesCopy = new ArrayList<>(roomManager.getCurrentRoom().getEnemyList());
         if (keyPressed == KeyEvent.VK_DOWN){
             System.out.println("User pressed down key!");
-            hero.setPosition(Direction.DOWN);
-            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
-            ) {
-                if(i instanceof Enemies){
-                    ((Enemies) i).movement();
-                }
-            }
+            hero.update(Direction.DOWN);
+            hero.setLastDirection(Direction.DOWN);
         }
         if (keyPressed == KeyEvent.VK_UP){
             System.out.println("User pressed up key!");
-            hero.setPosition(Direction.UP);
-            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
-            ) {
-                if(i instanceof Enemies){
-                    ((Enemies) i).movement();
-                }
-            }
+            hero.update(Direction.UP);
+            hero.setLastDirection(Direction.UP);
         }
         if (keyPressed == KeyEvent.VK_LEFT){
             System.out.println("User pressed left key!");
-            hero.setPosition(Direction.LEFT);
-            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
-            ) {
-                if(i instanceof Enemies){
-                    ((Enemies) i).movement();
-                }
-            }
+            hero.update(Direction.LEFT);
+            hero.setLastDirection(Direction.LEFT);
         }
         if (keyPressed == KeyEvent.VK_RIGHT){
             System.out.println("User pressed right key!");
-            hero.setPosition(Direction.RIGHT);
-            for (ImageTile i: roomManager.getCurrentRoom().getTiles()
-            ) {
-                if(i instanceof Enemies){
-                    ((Enemies) i).movement();
-                }
-            }
+            hero.update(Direction.RIGHT);
+            hero.setLastDirection(Direction.RIGHT);
+        }
+        if (keyPressed == KeyEvent.VK_I) {
+            gui.showMessage("Score:", "Tens " + hero.getScore() + " pontos.");
         }
 
-            for (Enemies enemy : RoomManager.getINSTANCE().getCurrentRoom().getEnemyList()) {
+       if (keyPressed == KeyEvent.VK_1) {
+           hero.useOrDrop(1);
+        } else if (keyPressed == KeyEvent.VK_2) {
+           hero.useOrDrop(2);
+        } else if (keyPressed == KeyEvent.VK_3) {
+            hero.useOrDrop(3);
+        }
+
+        if (keyPressed == KeyEvent.VK_SPACE){
+            System.out.println("Usaste uma bola de fogo!");
+            hero.useFireball();
+        }
+        synchronized (enemiesCopy) {
+            for (Enemies enemy : enemiesCopy) {
+                enemy.movement();
+            }
+        }
+        synchronized (RoomManager.getInstance().getCurrentRoom().getEnemyList()) {
+            for (Enemies enemy : RoomManager.getInstance().getCurrentRoom().getEnemyList()) {
                 if (enemy.getPosition().equals(Hero.getInstance().getPosition())) {
                     int enemyDamage = enemy.getDamage();
                     Hero.getInstance().takeDamage(enemyDamage);
                     enemy.takeDamage(Hero.getInstance().getDamage());
                     StatusBar.getInstance().update();
                 }
-
             }
+        }
     }
 
 

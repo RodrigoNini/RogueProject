@@ -4,7 +4,11 @@ import pt.upskill.projeto1.gui.ImageMatrixGUI;
 import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.objects.Hero;
 import pt.upskill.projeto1.objects.RoomManager;
+import pt.upskill.projeto1.objects.StatusObjects.StatusBar;
 import pt.upskill.projeto1.rogue.utils.Position;
+import pt.upskill.projeto1.rogue.utils.Vector2D;
+
+import java.util.Random;
 
 public abstract class Enemies implements ImageTile {
     ImageMatrixGUI gui = ImageMatrixGUI.getInstance();
@@ -13,6 +17,7 @@ public abstract class Enemies implements ImageTile {
     private int health;
     private int damage;
 
+
     public Enemies(String name, Position position, int health, int damage) {
         this.name = name;
         this.position = position;
@@ -20,26 +25,8 @@ public abstract class Enemies implements ImageTile {
         this.damage = damage;
     }
 
-    public abstract void movement();
-
-    public void dies() { //when enemy dies, it is moved to out of view
-        setPosition(new Position(-1, -1));
-        gui.removeImage(this);
-        RoomManager.getINSTANCE().getCurrentRoom().removeEnemy(this);
-        gui.setStatus("You have killed an enemy!");
-    }
-
-    public void takeDamage(int damage){
-        health = health - damage;
-        if (health <= 0){
-            dies();
-        } else {
-            gui.setStatus("Ememy took damage!" + "Enemy health: " + health);
-        }
-    }
-
-
-     public abstract String getName();
+    // Getters and Setters
+    public abstract String getName();
 
 
     public Position getPosition(){
@@ -54,13 +41,94 @@ public abstract class Enemies implements ImageTile {
         return health;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }
 
-    public void die() { //when enemy dies, it is moved to out of view
+
+    private Position nearHeroMovement() {
+        Position heroPosition = Hero.getInstance().getPosition();
+        int dx = heroPosition.getX() - getPosition().getX();
+        int dy = heroPosition.getY() - getPosition().getY();
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dx = dx > 0 ? 1 : -1;
+            dy = 0;
+        } else {
+            dx = 0;
+            dy = dy > 0 ? 1 : -1;
+        }
+        return getPosition().plus(new Vector2D(dx, dy));
+    }
+
+    public Position randomMovement() {
+        Random random = new Random();
+        int direction = random.nextInt(4);
+
+        int dx = 0;
+        int dy = 0;
+
+        switch (direction) {
+            case 0: // Para cima
+                dy = -1;
+                break;
+            case 1: // Para baixo
+                dy = 1;
+                break;
+            case 2: // Para a esquerda
+                dx = -1;
+                break;
+            case 3: // Para a direita
+                dx = 1;
+                break;
+        }
+        return getPosition().plus(new Vector2D(dx, dy));
+    }
+
+    private int distanceBetween(Position pos1, Position pos2) {
+        int distX = pos1.getX() - pos2.getX();
+        int distY = pos1.getY() - pos2.getY();
+        return distX + distY;
+    }
+
+    public void movement() {
+        Position newPosition;
+
+        int distance = distanceBetween(getPosition(), Hero.getInstance().getPosition());
+        if (distance <= 3) {
+            newPosition = nearHeroMovement();
+        } else {
+            newPosition = randomMovement();
+        }
+
+        if (!RoomManager.getInstance().getCurrentRoom().findObstacle(newPosition)) {
+            setPosition(newPosition);
+        }
+        if (newPosition.equals(Hero.getInstance().getPosition())) {
+            Hero.getInstance().takeDamage(damage);
+            takeDamage(Hero.getInstance().getDamage());
+            StatusBar.getInstance().update();
+        }
+    }
+
+    public void dies() {
         setPosition(new Position(-1, -1));
-        gui.setStatus("You have killed an enemy!");
+        RoomManager.getInstance().getCurrentRoom().removeEnemy(this);
+        gui.setStatus("Mataste um inimigo! O teu score é " + Hero.getInstance().getScore() + "!");
+        Hero.getInstance().addScore(15);
+    }
+
+    public void takeDamage(int damage){
+        if (getHealth() - damage <= 0) {
+            setHealth(0);
+            this.dies();
+        }
+        else
+            setHealth(getHealth() - damage);
     }
 }
 

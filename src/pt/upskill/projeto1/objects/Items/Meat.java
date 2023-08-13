@@ -4,10 +4,8 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Meat extends Itens {
 
-    private Position position;
-
     public Meat(Position position) {
-        this.position = position;
+        super("GoodMeat", position);
     }
 
     @Override
@@ -15,13 +13,5 @@ public class Meat extends Itens {
         return "GoodMeat";
     }
 
-    @Override
-    public Position getPosition() {
-        return position;
-    }
 
-    @Override
-    public boolean isWeapon() {
-        return false;
-    }
 }

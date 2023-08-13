@@ -4,32 +4,18 @@ import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Key extends Itens {
 
-    private Position position;
-    private String door;
+    private String keyName;
 
-    public Key(Position position) {
-        super(position);
-    }
-    public Key(String door){
-        this.door = door;
+    public Key(String keyName){
+        this.keyName = keyName;
     }
 
-    public String getDoor() {
-        return door;
+    public String getKeyName() {
+        return keyName;
     }
-
     @Override
     public String getName() {
         return "Key";
     }
 
-    @Override
-    public boolean isWeapon() {
-        return false;
-    }
-
-    @Override
-    public Position getPosition() {
-        return position;
-    }
 }

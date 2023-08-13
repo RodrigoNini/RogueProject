@@ -1,5 +1,6 @@
 #
 # 0 D room1.txt 2
+# 1 D room3.txt 0 key2
 #
 WWWW0WWWWW
 W        W
@@ -10,4 +11,4 @@ W   W  WWW
 W  H     W
 W        W
 W        W
-WWWWWWWWWW
+WWWW1WWWWW

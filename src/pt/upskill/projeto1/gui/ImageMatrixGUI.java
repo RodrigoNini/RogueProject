@@ -375,6 +375,7 @@ public class ImageMatrixGUI {
 				while (true)
 					waitForKey();
 			} catch (InterruptedException e) {
+
 			}
 		}
 	}

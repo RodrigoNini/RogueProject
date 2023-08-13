@@ -4,28 +4,24 @@ import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
 public class Door implements ImageTile {
-
     private Position position;
     private String number;
-    private String type;
+    private String frame;
     private String nextRoom;
     private String nextDoor;
-    private String requiredKey;
+    private String key;
     private boolean needsKey = false;
     private boolean isOpen = false;
-
-    public Door(Position position) {
-        this.position = position;
-    }
-    public Door(){
-    }
-
-    public void setNextRoom(String nextRoom) {
+    public Door(String number, String frame, String nextRoom, String nextDoor){
+        this.number = number;
+        this.frame = frame;
+        this.nextDoor = nextDoor;
         this.nextRoom = nextRoom;
     }
-
-    public void setNextDoor(String nextDoor) {
-        this.nextDoor = nextDoor;
+    public Door(String number, String frame, String nextRoom, String nextDoor, String key){
+        this(number, frame, nextRoom, nextDoor);
+        this.key = key;
+        needsKey = true;
     }
 
     public int getNextRoom() {
@@ -53,36 +49,29 @@ public class Door implements ImageTile {
         }
     }
 
-    public boolean needsKey() {
+    public boolean requiresKey() {
         return needsKey;
     }
 
-    public void setRequiresKey(boolean needsKey) {
+    public void setNeedsKey(boolean needsKey) {
         this.needsKey = needsKey;
     }
 
-    public String getRequiredKey() {
-        return requiredKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setRequiredKey(String requiredKey) {
-        this.requiredKey = requiredKey;
-    }
-    public void setType(String type) {
-        this.type = type;
+    public void setFrame(String type) {
+        this.frame = type;
     }
 
     public void setOpen(boolean open) {
         isOpen = open;
     }
 
-    public boolean isOpen() {
-        return isOpen;
-    }
-
     @Override
     public String getName() {
-        if (type.equals("E")){
+        if (frame.equals("E")){
             return "DoorWay";
         } else {
             if (isOpen) {

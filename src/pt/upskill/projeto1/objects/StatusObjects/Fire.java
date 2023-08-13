@@ -1,29 +1,22 @@
-package pt.upskill.projeto1.objects.Items;
+package pt.upskill.projeto1.objects.StatusObjects;
 
+import pt.upskill.projeto1.gui.ImageTile;
 import pt.upskill.projeto1.rogue.utils.Position;
 
-public class Hammer extends Itens {
+public class Fire implements ImageTile {
 
     private Position position;
 
-    public Hammer(Position position) {
+    public Fire(Position position) {
         this.position = position;
     }
-
     @Override
     public String getName() {
-        return "Hammer";
+        return "Fire";
     }
 
     @Override
     public Position getPosition() {
         return position;
-    }
-
-
-
-    @Override
-    public boolean isWeapon() {
-        return true;
     }
 }
